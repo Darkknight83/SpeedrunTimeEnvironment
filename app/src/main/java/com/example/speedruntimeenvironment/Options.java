@@ -12,8 +12,13 @@ import android.widget.Button;
 
 public class Options extends Fragment {
 
+
+//--------------Attribute
+
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
+
+//--------------Methode die beim Erstellen der View aufgerufen wird
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -21,20 +26,19 @@ public class Options extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.activity_options, container, false);
 
-        fragmentManager = getActivity().getSupportFragmentManager();
-        fragmentTransaction = fragmentManager.beginTransaction();
+//--------------Listener für die einzelnen Buttons - Sub_MainActivity aufrufen und Destination (Namen) als Intent übergeben
 
-        Button favorites = (Button)v.findViewById(R.id.btn_favorites);
+        Button favorites = (Button) v.findViewById(R.id.btn_favorites);
         favorites.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-               Intent intent = new Intent(getActivity(), Sub_MainActivity.class);
-               intent.putExtra("Destination", getString(R.string.favorites));
-               startActivity(intent);
+                Intent intent = new Intent(getActivity(), Sub_MainActivity.class);
+                intent.putExtra("Destination", getString(R.string.favorites));
+                startActivity(intent);
             }
         });
-        Button notifications = (Button)v.findViewById(R.id.btn_notifications);
+        Button notifications = (Button) v.findViewById(R.id.btn_notifications);
         notifications.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -44,7 +48,7 @@ public class Options extends Fragment {
                 startActivity(intent);
             }
         });
-        Button backup = (Button)v.findViewById(R.id.btn_backup);
+        Button backup = (Button) v.findViewById(R.id.btn_backup);
         backup.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -54,7 +58,7 @@ public class Options extends Fragment {
                 startActivity(intent);
             }
         });
-        Button faq = (Button)v.findViewById(R.id.btn_faq);
+        Button faq = (Button) v.findViewById(R.id.btn_faq);
         faq.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -64,7 +68,7 @@ public class Options extends Fragment {
                 startActivity(intent);
             }
         });
-        Button appinfo = (Button)v.findViewById(R.id.btn_appinfo);
+        Button appinfo = (Button) v.findViewById(R.id.btn_appinfo);
         appinfo.setOnClickListener(new View.OnClickListener() {
 
             @Override

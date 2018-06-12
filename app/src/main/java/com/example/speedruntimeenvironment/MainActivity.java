@@ -18,8 +18,11 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+//--------------Attribute
+
     private boolean doubleTap = false;
 
+    //Toolbar Items, die sichtbar gemacht oder versteckt werden können
     private MenuItem search;
     private MenuItem filter;
 
@@ -27,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
+
+//--------------Methode die beim Erstellen der Activity aufgerufen wird
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +59,10 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
 
+//--------------Listener für den Navigation Drawer
+
         NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.getMenu().getItem(0).setChecked(true); //Highlight Games beim Start
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -64,72 +72,66 @@ public class MainActivity extends AppCompatActivity {
 //--------------close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
-//--------------Fragment wechselt, wenn Seite ausgewählt auf Basis der ItemId, Titel neu gesetzt
+//--------------Fragment wechselt, wenn Seite ausgewählt auf Basis der ItemId, Titel neu gesetzt, Toolbar Items Sichtbarkeit angepasst
 
                         fragmentManager = getSupportFragmentManager();
                         fragmentTransaction = fragmentManager.beginTransaction();
 
                         Fragment page;
 
-                        switch(menuItem.getItemId()){
+                        switch (menuItem.getItemId()) {
                             case R.id.nav_games:
                                 page = new Games();
                                 setTitle(getString(R.string.games));
+                                search.setVisible(true);
+                                filter.setVisible(true);
                                 break;
 
                             case R.id.nav_streams:
                                 page = new Streams();
                                 setTitle(getString(R.string.streams));
+                                search.setVisible(true);
+                                filter.setVisible(true);
                                 break;
 
                             case R.id.nav_options:
                                 page = new Options();
                                 setTitle(getString(R.string.options));
+                                search.setVisible(false);
+                                filter.setVisible(false);
                                 break;
 
-                                default:
-                                    page = new Games();
-                                    setTitle(getString(R.string.games));
-                                    break;
+                            default:
+                                page = new Games();
+                                setTitle(getString(R.string.games));
+                                search.setVisible(true);
+                                filter.setVisible(true);
+                                break;
                         }
 
                         fragmentTransaction.replace(R.id.content_frame, page);
                         fragmentTransaction.commit();
-
-//--------------Die Toolbar wird dem Fragment angepasst
-
-                        if(getTitle().equals(getString(R.string.games))){
-                            search.setVisible(true);
-                            filter.setVisible(true);
-                        }
-                        if(getTitle().equals(getString(R.string.streams))){
-                            search.setVisible(true);
-                            filter.setVisible(true);
-                        }
-                        if(getTitle().equals(getString(R.string.options))){
-                            search.setVisible(false);
-                            filter.setVisible(false);
-                        }
 
                         return true;
                     }
                 });
     }
 
-//--------------Items der Toolbar hinzufügen, Verfügbar machen zum Verbergen/Anzeigen
+//--------------Items der Toolbar hinzufügen
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.tooblarmenu, menu);
 
+        //um die Items ansteuern zu können
         search = menu.findItem(R.id.action_search);
         filter = menu.findItem(R.id.action_filter);
 
         return true;
     }
 
-//--------------Aktionen beim drücken der Actionbar Items
+//--------------Aktionen beim drücken der Actionbar Items hier einfügen
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -142,27 +144,27 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//--------------Damit die Back-Taste das Menü schließt statt aus der App zu gehen
+//--------------Damit die Back-Taste das Menü schließt statt aus der App zu gehen + Doubletab Funktion
 
     @Override
     public void onBackPressed() {
 
-            if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
-                mDrawerLayout.closeDrawers();
+        if (mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawers();
+        } else {
+            if (doubleTap) {
+                super.onBackPressed();
             } else {
-                if (doubleTap) {
-                    super.onBackPressed();
-                } else {
-                    Toast.makeText(this, "Double tab to exit", Toast.LENGTH_SHORT).show();
-                    doubleTap = true;
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            doubleTap = false;
-                        }
-                    }, 1000);
-                }
+                Toast.makeText(this, "Double tab to exit", Toast.LENGTH_SHORT).show();
+                doubleTap = true;
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        doubleTap = false;
+                    }
+                }, 1000);
             }
         }
+    }
 }

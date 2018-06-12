@@ -1,9 +1,7 @@
 package com.example.speedruntimeenvironment;
 
-import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +10,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class Sub_MainActivity extends AppCompatActivity {
+
+//--------------Attribute
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -31,30 +31,37 @@ public class Sub_MainActivity extends AppCompatActivity {
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
 
-//--------------Frame in dem die Fragments erscheinen
+//--------------Fragmente werden anhand des Titels, welcher durch ein Intent übergeben wird ausgewählt
 
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
 
-//--------------Auswahl des Fragments
-
-        if(getTitle().equals(getString(R.string.favorites))) fragmentTransaction.replace(R.id.sub_content_frame, new Favorites());
-        if(getTitle().equals(getString(R.string.notifications))) fragmentTransaction.replace(R.id.sub_content_frame, new Notifications());
-        if(getTitle().equals(getString(R.string.backup))) fragmentTransaction.replace(R.id.sub_content_frame, new BackUp());
-        if(getTitle().equals(getString(R.string.faq))) fragmentTransaction.replace(R.id.sub_content_frame, new Faq());
-        if(getTitle().equals(getString(R.string.appinfo))) fragmentTransaction.replace(R.id.sub_content_frame, new AppInfo());
+        if (getTitle().equals(getString(R.string.favorites)))
+            fragmentTransaction.replace(R.id.sub_content_frame, new Favorites());
+        if (getTitle().equals(getString(R.string.notifications)))
+            fragmentTransaction.replace(R.id.sub_content_frame, new Notifications());
+        if (getTitle().equals(getString(R.string.backup)))
+            fragmentTransaction.replace(R.id.sub_content_frame, new BackUp());
+        if (getTitle().equals(getString(R.string.faq)))
+            fragmentTransaction.replace(R.id.sub_content_frame, new Faq());
+        if (getTitle().equals(getString(R.string.appinfo)))
+            fragmentTransaction.replace(R.id.sub_content_frame, new AppInfo());
 
         fragmentTransaction.commit();
     }
+
+//--------------Items der Toolbar hinzufügen
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.sub_toolbarmenu, menu);
 
+
+        //Sichtbarkeitssteuerung der Items
         favorize = menu.findItem(R.id.action_favorite);
 
-        if(getTitle().equals(getString(R.string.overview))){
+        if (getTitle().equals(getString(R.string.overview))) {
             favorize.setVisible(true);
         } else {
             favorize.setVisible(false);
@@ -63,13 +70,18 @@ public class Sub_MainActivity extends AppCompatActivity {
         return true;
     }
 
+//--------------Aktionen beim drücken der Actionbar Items hier einfügen
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             // Respond to the action bar's Up/Home button
             case android.R.id.home:
-               onBackPressed();
+                onBackPressed();
                 return true;
+            //to-do
+            //case R.id.action_favorite:
+
         }
         return super.onOptionsItemSelected(item);
     }
