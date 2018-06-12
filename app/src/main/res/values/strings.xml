@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Speedrun Time Environment</string>
+    <string name="games">Games</string>
+    <string name="streams">Streams</string>
+    <string name="options">Options</string>
+    <string name="favorites">Favorites</string>
+    <string name="notifications">Notifications</string>
+    <string name="backup">Backup</string>
+    <string name="faq">FAQ</string>
+    <string name="appinfo">App-Info</string>
+    <string name="logosmall">Logo Small</string>
+    <string name="search">Search</string>
+    <string name="filter">Filter</string>
+    <string name="backarrow">BackArrow</string>
+    <string name="title_activity_faq">faq</string>
+    <string name="favorite">Favorite</string>
+    <string name="overview">Overview</string>
+    <string name="opendrawer">opendrawer</string>
+    <string name="closedrawer">closedrawer</string>
+</resources>
