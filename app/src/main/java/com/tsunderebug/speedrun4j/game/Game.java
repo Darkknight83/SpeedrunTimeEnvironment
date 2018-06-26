@@ -179,4 +179,9 @@ public class Game {
 		Game data;
 	}
 
+	public String toString()
+	{
+		return names.get("international");
+	}
+
 }

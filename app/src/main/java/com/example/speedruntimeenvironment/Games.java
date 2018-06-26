@@ -14,49 +14,87 @@ import com.tsunderebug.speedrun4j.game.Game;
 import com.tsunderebug.speedrun4j.game.GameList;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Games extends Fragment {
 
-    Game[] games;
+    List<Game> games;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.activity_games, container, false);
-        try
-        {
-            fetchPopular();
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-        ListView listview = (ListView)view.findViewById(R.id.mainList);
-
-        /*ArrayAdapter<Game> listViewAdapter = new ArrayAdapter<Game>(
-                getActivity(),
-                android.R.layout.simple_list_item_1,
-                games
-        );*/
-
-        //listview.setAdapter(listViewAdapter);
-
+        games = new ArrayList<>();
+        
         // Inflate the layout for this fragment
         return view;
     }
 
-    private void fetchPopular() throws IOException
+    //Spiele der der Definierten Liste zu Games hinzufügen
+    public void fetchPopular()
     {
-        String[] s_games = {"Super Mario","Metroid","Celest"};
-        /*for (String s: s_games)
+        new Thread(new Runnable()
         {
-            games.addAll(Arrays.asList(GameList.withName(s).getGames()));
-        }*/
-        games = GameList.withName("Super Mario").getGames();
+            @Override
+            public void run()
+            {
+                String[] s_games = {"Super Mario","Metroid","Celest"};
+                for (String s: s_games)
+                {
+                    try
+                    {
+                        games.addAll(Arrays.asList(GameList.withName(s).getGames()));
+                    }
+                    catch(IOException e)
+                    {
+                        System.out.print(e);
+                    }
+                }
+            }
+        }).start();
+
+    }
+
+    //Ein bestimmtes Spiel suchen und hinzufügen
+    public void fetchSearch(String name)
+    {
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try
+                {
+                    games.addAll(Arrays.asList(GameList.withName(name).getGames()));
+                }
+                catch(IOException e)
+                {
+                    System.out.print(e);
+                }
+            }
+        }).start();
+
+
+}
+
+    //get für Games liste
+    public List<Game> getGames()
+    {
+        return games;
+    }
+
+    //Games liste in ein Array umwandeln mit namen der Spiele als string
+    public String[] arrayToString()
+    {
+        List<String> tmp = new ArrayList<>();
+        for(Game g : games)
+        {
+            tmp.add(g.toString());
+        }
+        return tmp.toArray(new String[tmp.size()]);
     }
 
 }
