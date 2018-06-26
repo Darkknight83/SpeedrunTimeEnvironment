@@ -36,6 +36,8 @@ public class Sub_MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
 
+        if (getTitle().equals(getString(R.string.overview)))
+            fragmentTransaction.replace(R.id.sub_content_frame, new Overview());
         if (getTitle().equals(getString(R.string.favorites)))
             fragmentTransaction.replace(R.id.sub_content_frame, new Favorites());
         if (getTitle().equals(getString(R.string.notifications)))

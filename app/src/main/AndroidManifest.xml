@@ -23,6 +23,7 @@
             android:name=".Sub_MainActivity"
             android:label="SpeedrunTime Environment"
             android:parentActivityName=".MainActivity" />
+        <activity android:name=".Overview"></activity>
     </application>
 
 </manifest>

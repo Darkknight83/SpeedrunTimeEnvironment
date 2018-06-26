@@ -10,10 +10,17 @@ import android.widget.TextView;
 import java.util.List;
 
 public class StringAdapter extends RecyclerView.Adapter<StringAdapter.ViewHolder> {
-    private final List<String> liste;
 
-    public StringAdapter(List<String> liste1) {
-        this.liste = liste1;
+    public interface OnItemClickListener {
+        void onItemClick(String item);
+    }
+
+    private final List<String> liste;
+    private final OnItemClickListener listener;
+
+    public StringAdapter(List<String> liste, OnItemClickListener listener) {
+        this.liste = liste;
+        this.listener = listener;
     }
 
     @Override
@@ -23,11 +30,11 @@ public class StringAdapter extends RecyclerView.Adapter<StringAdapter.ViewHolder
         return new ViewHolder(view);
     }
 
-//--------------Text an Textfeld binden
+    //--------------Text an Textfeld binden
     @Override
 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.NameView.setText(liste.get(position));
+        holder.bind(liste.get(position), listener);
     }
 
 //--------------Anzahl Listenitems
@@ -39,13 +46,23 @@ public class StringAdapter extends RecyclerView.Adapter<StringAdapter.ViewHolder
 
 //--------------Textview mit Attribut assoziieren
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView NameView;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        private TextView NameView;
 
         public ViewHolder(View view) {
             super(view);
             NameView = (TextView) view.findViewById(R.id.item_name);
         }
 
+        //--------------Listener wird an das Item gebunden
+
+    public void bind(final String item, final OnItemClickListener listener){
+        NameView.setText(item);
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                listener.onItemClick(item);
+            }
+        });
+    }
     }
 }

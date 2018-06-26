@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -25,7 +24,7 @@ public class Options extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.activity_options, container, false);
+        View v = inflater.inflate(R.layout.fragment_options, container, false);
 
 //--------------Listener für die einzelnen Buttons - Sub_MainActivity aufrufen und Destination (Namen) als Intent übergeben
 
