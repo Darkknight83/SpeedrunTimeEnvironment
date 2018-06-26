@@ -43,14 +43,7 @@ public class Streams extends Fragment {
 
 //--------------Liste dem Adapter übergeben
 
-        mRecyclerView.setHasFixedSize(true);
-        mAdapter = new StringAdapter(GList, new StringAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(String item) {
-                Toast.makeText(getActivity(), item, Toast.LENGTH_SHORT).show();
-            }
-        });
-        mRecyclerView.setAdapter(mAdapter);
+
 
         return v;
     }

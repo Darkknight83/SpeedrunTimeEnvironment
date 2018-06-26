@@ -6,19 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import com.tsunderebug.speedrun4j.game.Game;
 
 import java.util.List;
 
-public class StringAdapter extends RecyclerView.Adapter<StringAdapter.ViewHolder> {
+public class GamesAdapter extends RecyclerView.Adapter<GamesAdapter.ViewHolder> {
 
     public interface OnItemClickListener {
-        void onItemClick(String item);
+        void onItemClick(Game item);
     }
 
-    private final List<String> liste;
+    private final List<Game> liste;
     private final OnItemClickListener listener;
 
-    public StringAdapter(List<String> liste, OnItemClickListener listener) {
+    public GamesAdapter(List<Game> liste, OnItemClickListener listener) {
         this.liste = liste;
         this.listener = listener;
     }
@@ -49,15 +50,15 @@ public class StringAdapter extends RecyclerView.Adapter<StringAdapter.ViewHolder
     static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView NameView;
 
-        public ViewHolder(View view) {
-            super(view);
-            NameView = (TextView) view.findViewById(R.id.item_name);
+        public ViewHolder(View itemView) {
+            super(itemView);
+            NameView = (TextView) itemView.findViewById(R.id.item_name);
         }
 
         //--------------Listener wird an das Item gebunden
 
-    public void bind(final String item, final OnItemClickListener listener){
-        NameView.setText(item);
+    public void bind(final Game item, final OnItemClickListener listener){
+        NameView.setText(item.getId());
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 listener.onItemClick(item);
