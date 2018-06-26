@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.speedruntimeenvironment">
 
+    <!-- permission um Internet zu benutzen,um auf speedrun.com api ueber async-http zuzugreifen -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/MyTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".controllers.MainActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="SpeedrunTime Environment">
             <intent-filter>
@@ -20,9 +23,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Sub_MainActivity"
+            android:name=".controllers.Sub_MainActivity"
             android:label="SpeedrunTime Environment"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".controllers.MainActivity" />
     </application>
 
 </manifest>
