@@ -46,7 +46,7 @@ public class StringAdapter extends RecyclerView.Adapter<StringAdapter.ViewHolder
 
         public ViewHolder(View view) {
             super(view);
-            NameView = (TextView) view.findViewById(R.id.item_name);
+            NameView = (TextView) view.findViewById(R.id.image_name);
         }
 
     }

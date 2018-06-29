@@ -13,7 +13,7 @@ public class GamesDAOImpl implements GamesDAO {
     @Override
     public List<String> getAllGamesAsStrings() {
 
-        // from JSON TODO
+        // from JSON-File TODO
 
         List<String> gameNames = new ArrayList<>();
         for(int i = 0; i < 15; i++) {
