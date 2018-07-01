@@ -15,6 +15,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -40,14 +41,18 @@ public class SpeedrunRestUsage {
                     GameList gamelist = GameList.fromJson(response);
 
                     // placeholder
-                    List<String> neueImageUrls = new ArrayList<>();
-                    List<Game> games = gamelist.getGames();
-                    for(Game g : games) {
-                        neueImageUrls.add(g.getId()); // todo: imageUrls herausfinden und in liste packen
-                    }
+                    List<String> neueImageUrls = new ArrayList<>();     // TODO: aendern, sodass List<Game> in Games verwaltet wird
+                    List<String> neueIds = gamelist.getIdsAsStrings();
+                    // List<String> games = gamelist.getGamesAsStrings();
 
-                    adapter.setImageNames(gamelist.getGamesAsStrings());
+                    neueImageUrls.add("https://imgsv.imaging.nikon.com/lineup/lens/zoom/normalzoom/af-s_dx_18-140mmf_35-56g_ed_vr/img/sample/img_04.jpg");
+                    neueImageUrls.add("https://imgsv.imaging.nikon.com/lineup/lens/zoom/normalzoom/af-s_dx_18-140mmf_35-56g_ed_vr/img/sample/img_05.jpg");
+
+
+
+                    //adapter.setImageNames(gamelist.getGamesAsStrings());
                     adapter.setImages(neueImageUrls);
+                    //adapter.setIds(gamelist.getIdsAsStrings());
 
                 } catch (JSONException e){
                     e.printStackTrace();
@@ -65,6 +70,41 @@ public class SpeedrunRestUsage {
                 super.onFailure(statusCode, headers, responseString, throwable);    // TODO: custom exception werfen und im controller behandeln
             }
         });
+        
+    }
+
+
+    public String getImageUrlToGame(String pGameId) {
+        Log.d(TAG, "getImageUrlToGame: START");
+
+        String url = "/games/" + pGameId;
+
+        final AtomicReference<String> retVal = new AtomicReference<>();
+
+        SpeedrunRestClient.get(url, null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                // super.onSuccess(statusCode, headers, response); //
+                Log.d(TAG, "onSuccess: successful http-call - Code " + statusCode);
+                try {
+                    Game game = Game.fromJson(response);
+                    retVal.set(game.getUrlImage());
+
+                } catch (JSONException e){
+                    e.printStackTrace();
+                    retVal.set("");
+                    Log.d(TAG, "Error while parsing JSON");
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);    // TODO: custom exception werfen und im controller behandeln
+            }
+        });
+
+        return retVal.get();
+
     }
 
 }

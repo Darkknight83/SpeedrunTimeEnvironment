@@ -15,116 +15,78 @@ import com.example.speedruntimeenvironment.controllers.speedrun.http.SpeedrunRes
 import com.example.speedruntimeenvironment.daos.api.GamesDAO;
 import com.example.speedruntimeenvironment.daos.impl.GamesDAOImpl;
 import com.example.speedruntimeenvironment.model.GameList;
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cz.msebera.android.httpclient.Header;
+
 
 public class Games extends Fragment {
 
     private static final String TAG = "Games";
 
+    private final String GAMES_FILE = "popular_games.json";   // TODO
+
+    // listen fuer recyclerview
     private List<String> mGameNames = new ArrayList<>();
     private List<String> mGameImageUrls = new ArrayList<>();
+    private List<String> mGameIds = new ArrayList<>();
 
+    // neu: eine zentrale Liste
+    private GameList mGameList = new GameList();    // muss nicht init werden hier TODO: check
 
     // ui
     private RecyclerView recyclerView;
     private GamesRecyclerAdapter adapter;
 
 
+    // http-requests
+    SpeedrunRestUsage client;
 
-    // private HttpClientSpeedrun httpClient;
+
+    // dao fuer Persistierung spaeter
     private GamesDAO gamesDAO;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.activity_games, container, false);
 
         Log.d(TAG, "onCreateView: started");
 
+        // Inflate the layout for this fragment
+        View v =  inflater.inflate(R.layout.activity_games, container, false);
+
         // init
         this.gamesDAO = new GamesDAOImpl();
+        this.client = new SpeedrunRestUsage();
 
 
-        initImageBitmaps(v);
-
-        initImageBitmaps(v);
+        initGames(v);
 
         return v;
-
-
-//--------------RecyclerView mit Layout verbinden
-
-        /*
-        this.mRecyclerView = (RecyclerView) v.findViewById(R.id.games_list);
-        this.mLayoutManager = new LinearLayoutManager(this.getActivity());
-        mRecyclerView.setLayoutManager(this.mLayoutManager);
-
-
-        mRecyclerView.setHasFixedSize(true);
-        // mAdapter = new GamesRecyclerAdapter(httpClient.getGamesAsArray());
-        mAdapter = new GamesRecyclerAdapter(this.mGames);
-        mRecyclerView.setAdapter(mAdapter);
-
-//--------------DummyListe
-
-
-        // gList = this.httpClient.getGamesAsStrings();
-
-        // this.gList = this.gamesDAO.getAllGamesAsStrings();
-
-        AsyncHttpClient client = new AsyncHttpClient();
-
-        RequestParams params = new RequestParams();
-
-        params.put("_bulk", "yes");
-        params.put("max" , "1000");
-
-        client.get(constructUrl("/games/"), params,  new JsonHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d(TAG, "getAllGamesBulk() successful; JSON: " + response.toString());
-
-                try {
-                    GameList gamelist = GameList.fromJson(response);
-                    mGames = gamelist.getGames();
-                    Log.d(TAG, "onSuccess() completed");
-
-                } catch (JSONException e){
-                    e.printStackTrace();
-                    Log.d(TAG, "Error while parsing JSON");
-                    mGames = null;
-                }
-                mAdapter.setGames(mGames);
-                mAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.d(TAG, "Error while fetching data");
-            }
-        });
-        */
     }
 
-    private void initImageBitmaps(View v) {
+    private void initGames(View v) {
 
-        Log.d(TAG, "initImageBitmaps: preparing bitmaps");
+        Log.d(TAG, "initGames: START");
 
-        // getting imageUrls + adding them to list
+        // hole games und adde sie zur liste
 
+        try {
+            mGameList.setGames(this.gamesDAO.getPopularGamesFromFile(GAMES_FILE, this.getActivity()));
+        } catch (IOException e) {
+            Log.e(TAG, "initGames: JSON-file not found", e);    // TODO: Toast hier: "Couldn't load games"
+        } catch (JSONException e) {
+            Log.e(TAG, "initGames: Error while parsing JSON-file", e);  //TODO: Toast hier: "Couldn't load games"
+        }
+
+
+        /*
         mGameImageUrls.add("https://imgsv.imaging.nikon.com/lineup/lens/zoom/normalzoom/af-s_dx_18-140mmf_35-56g_ed_vr/img/sample/img_01.jpg");
         mGameNames.add("Spatz");
 
@@ -133,40 +95,6 @@ public class Games extends Fragment {
 
         mGameImageUrls.add("https://imgsv.imaging.nikon.com/lineup/lens/zoom/normalzoom/af-s_dx_18-140mmf_35-56g_ed_vr/img/sample/img_03.jpg");
         mGameNames.add("Paris");
-
-        /*
-        AsyncHttpClient client = new AsyncHttpClient();
-
-
-        RequestParams params = new RequestParams();
-
-        params.put("_bulk", "yes");
-        params.put("max" , "1000");
-
-        client.get(constructUrl("/games/"), params,  new JsonHttpResponseHandler() {
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                Log.d(TAG, "getAllGamesBulk() successful; JSON: " + response.toString());
-
-                try {
-                    GameList gamelist = GameList.fromJson(response);
-                    mGameNames = gamelist.getGamesAsStrings();
-                    Log.d(TAG, "onSuccess() completed");
-
-                } catch (JSONException e){
-                    e.printStackTrace();
-                    Log.d(TAG, "Error while parsing JSON");
-                    mGameNames = null;
-                }
-
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                Log.d(TAG, "Error while fetching data from Speedrun.com");
-            }
-        });
         */
 
         initRecyclerView(v);
@@ -177,14 +105,18 @@ public class Games extends Fragment {
         Log.d(TAG, "initRecyclerView: START");
 
         recyclerView = (RecyclerView) v.findViewById(R.id.games_list);
-        adapter = new GamesRecyclerAdapter(getActivity(), mGameNames, mGameImageUrls);
+        // adapter = new GamesRecyclerAdapter(getActivity(), mGameNames, mGameImageUrls, mGameIds);
+        adapter = new GamesRecyclerAdapter(getActivity(), this.mGameList.getGameNamesAsStrings(), this.mGameList.getImageUrlAsStrings());
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
         // updateList();
 
-        makeApiCall();
+        // erstelleGamesListe();
+
+
+
     }
 
     private void updateList() {
@@ -208,12 +140,12 @@ public class Games extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    private void makeApiCall() {
-        Log.d(TAG, "makeApiCall: START");
-        
-        SpeedrunRestUsage client = new SpeedrunRestUsage();
+    private void erstelleGamesListe() {
+        Log.d(TAG, "erstelleGamesListe: START");
 
         client.getGamesBulk(this.adapter);
+
+
     }
 
 

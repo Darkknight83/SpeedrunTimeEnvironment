@@ -1,5 +1,10 @@
 package com.example.speedruntimeenvironment.model;
 
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Game {
     private String id;
 
@@ -8,6 +13,8 @@ public class Game {
     private String abbreviation;
 
     private String weblink;
+
+    private String urlImage;
 
     public Game() {
 
@@ -19,6 +26,17 @@ public class Game {
         this.name = name;
         this.abbreviation = abbreviation;
         this.weblink = weblink;
+    }
+
+    public static Game fromJson(JSONObject obj) throws JSONException{
+        Game game = new Game();
+
+        JSONObject root = obj.getJSONObject("data");
+
+
+        game.setUrlImage(root.getJSONObject("assets").getJSONObject("cover-small").getString("uri"));
+
+        return game;
     }
 
     public String getId() {
@@ -51,5 +69,13 @@ public class Game {
 
     public void setWeblink(String weblink) {
         this.weblink = weblink;
+    }
+
+    public String getUrlImage() {
+        return this.urlImage;
+    }
+
+    public void setUrlImage(String urlImage) {
+        this.urlImage = urlImage;
     }
 }

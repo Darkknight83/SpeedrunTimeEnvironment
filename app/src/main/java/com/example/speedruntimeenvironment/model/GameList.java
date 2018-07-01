@@ -38,8 +38,9 @@ public class GameList {
         return gameList;
     }
 
+    // todo: unteren 3 methoden refactorn zu einer?
 
-    public List<String> getGamesAsStrings() {
+    public List<String> getGameNamesAsStrings() {
         List<String> retVal = new ArrayList<>();
         for(Game g : games) {
             retVal.add(g.getName());
@@ -47,11 +48,18 @@ public class GameList {
         return retVal;
     }
 
+    public List<String> getIdsAsStrings() {
+        List<String> retVal = new ArrayList<>();
+        for(Game g : games) {
+            retVal.add(g.getId());
+        }
+        return retVal;
+    }
 
-    public Game[] getGamesAsArray() {
-        Game[] retVal = new Game[1000];
-        for(int i = 0; i < this.games.size(); i++) {
-            retVal[i] = this.games.get(i);
+    public List<String> getImageUrlAsStrings() {
+        List<String> retVal = new ArrayList<>();
+        for(Game g : games) {
+            retVal.add(g.getUrlImage());
         }
         return retVal;
     }
@@ -60,4 +68,7 @@ public class GameList {
         return this.games;
     }
 
+    public void setGames(List<Game> games) {
+        this.games = games;
+    }
 }

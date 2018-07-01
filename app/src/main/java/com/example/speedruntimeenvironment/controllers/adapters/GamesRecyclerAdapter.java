@@ -13,9 +13,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.speedruntimeenvironment.R;
-import com.example.speedruntimeenvironment.model.Game;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -23,13 +22,20 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdapter.GameViewHolder>{
     private static final String TAG = "GamesRecyclerAdapter";
 
-    private List<String> mImageNames = null;    //ggf aendern
+    private List<String> mImageNames = null;
     private List<String> mImages = null;
+    // private List<String> mIds = null;
+
+
+
+
     private Context mContext;
+
 
     public GamesRecyclerAdapter(Context context, List<String> imageNames, List<String> images) {
         mImageNames = imageNames;
         mImages = images;
+        // mIds = ids;
         mContext = context;
     }
 
@@ -45,7 +51,15 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
     public void onBindViewHolder(@NonNull GameViewHolder holder, int position) {
         Log.d(TAG, "onBindViewHolder: called");
 
+
+
         // get images
+        /*
+        Glide.with(mContext)
+                .asBitmap()
+                .load(mImages.get(position))    // image url
+                .into(holder.image);
+        */
         Glide.with(mContext)
                 .asBitmap()
                 .load(mImages.get(position))    // image url
@@ -54,13 +68,10 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
         // set image name
         holder.imageName.setText(mImageNames.get(position));
 
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "onClick: clicked on " + mImageNames.get(position));
+        holder.parentLayout.setOnClickListener(v -> {
+            Log.d(TAG, "onClick: clicked on " + mImageNames.get(position));
 
-                Toast.makeText(mContext, mImageNames.get(position), Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(mContext, mImageNames.get(position), Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -76,6 +87,12 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
     public void setImages(List<String> imageUrls) {
         this.mImages = imageUrls;
     }
+
+    /*
+    public void setIds(List<String> ids) {
+        this.mIds = ids;
+    }
+    */
 
     // holds each element of the list in memory
     public class GameViewHolder extends RecyclerView.ViewHolder {
