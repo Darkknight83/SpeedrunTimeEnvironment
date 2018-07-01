@@ -14,12 +14,6 @@ import com.example.speedruntimeenvironment.R;
 
 public class Options extends Fragment {
 
-
-//--------------Attribute
-
-    private FragmentManager fragmentManager;
-    private FragmentTransaction fragmentTransaction;
-
 //--------------Methode die beim Erstellen der View aufgerufen wird
 
     @Override

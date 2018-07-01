@@ -1,6 +1,7 @@
 package com.example.speedruntimeenvironment.controllers.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.speedruntimeenvironment.R;
+import com.example.speedruntimeenvironment.controllers.Sub_MainActivity;
+import com.example.speedruntimeenvironment.model.Game;
 
 
 import java.util.List;
@@ -30,7 +33,7 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
 
 
     private Context mContext;
-
+    private View view;
 
     public GamesRecyclerAdapter(Context context, List<String> imageNames, List<String> images) {
         mImageNames = imageNames;
@@ -42,7 +45,7 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
     @NonNull
     @Override
     public GameViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_element_view, parent, false);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_element_view, parent, false);
 
         return new GameViewHolder(view);
     }
@@ -70,8 +73,8 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
 
         holder.parentLayout.setOnClickListener(v -> {
             Log.d(TAG, "onClick: clicked on " + mImageNames.get(position));
-
-            Toast.makeText(mContext, mImageNames.get(position), Toast.LENGTH_SHORT).show();
+            //To-Do hier müsste das Overviewfragment aufgerufen werden. Mit intent des Namens vom Zielfragment und der GameID
+            //ist im Adapter nicht möglich
         });
     }
 
@@ -109,6 +112,5 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
             parentLayout = itemView.findViewById(R.id.parent_layout);
         }
     }
-
 
 }

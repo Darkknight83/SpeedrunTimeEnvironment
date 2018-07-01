@@ -2,6 +2,9 @@
     <string name="app_name">Speedrun Time Environment</string>
     <string name="games">Games</string>
     <string name="streams">Streams</string>
+    <string name="streampage">Stream</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="guides">Guides</string>
     <string name="options">Options</string>
     <string name="favorites">Favorites</string>
     <string name="notifications">Notifications</string>
