@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.example.speedruntimeenvironment.R;
 
 public class Overview extends Fragment {
@@ -18,6 +21,17 @@ public class Overview extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.activity_options, container, false);
+
+        TextView name = v.findViewById(R.id.game_name);
+        TextView year = v.findViewById(R.id.game_year);
+        TextView devices = v.findViewById(R.id.game_devices);
+        ImageView Img = v.findViewById(R.id.game_img);
+
+        //Hier dann die Objekt-Informationen passend einfügen
+        name.setText("");
+        year.setText("");
+        devices.setText("");
+        //Img.setImage...
 
         Button leaderboard = (Button) v.findViewById(R.id.btn_leaderboard);
         leaderboard.setOnClickListener(new View.OnClickListener() {
