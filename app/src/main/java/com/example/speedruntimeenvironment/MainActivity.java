@@ -1,6 +1,7 @@
 package com.example.speedruntimeenvironment;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
@@ -8,16 +9,24 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.tsunderebug.speedrun4j.game.Game;
+import com.tsunderebug.speedrun4j.game.GameList;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
 
+    private List<Game> games;
+    public static final String GAMES = "GAMES";
+
 //--------------Methode die beim Erstellen der Activity aufgerufen wird
 
     @Override
@@ -41,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation);
         setTitle(getString(R.string.games));
-
 //--------------Toolbar als Actionbar setzen und Burgermenu hinzufügen
 
         Toolbar toolbar = findViewById(R.id.toolbarmenu);
@@ -140,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
-            case R.id.action_search:
+            //case R.id.action_search:
 
         }
         return super.onOptionsItemSelected(item);
@@ -167,6 +178,27 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }, 1000);
             }
+        }
+    }
+
+    public void saveList(){
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(games);
+        editor.putString(GAMES, json);
+        editor.apply();
+    }
+
+    public void loadList(){
+        SharedPreferences sharedPreferences = getSharedPreferences("sharedPreferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString(GAMES, null);
+        Type type = new TypeToken<ArrayList<Game>>() {}.getType();
+        games = gson.fromJson(json, type);
+
+        if(games == null){
+            games = new ArrayList<Game>();
         }
     }
 }

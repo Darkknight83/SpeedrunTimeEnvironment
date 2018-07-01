@@ -1,6 +1,7 @@
 package com.example.speedruntimeenvironment;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,13 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.tsunderebug.speedrun4j.game.Game;
 import com.tsunderebug.speedrun4j.game.GameList;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class Games extends Fragment{
 
@@ -23,6 +29,7 @@ public class Games extends Fragment{
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private List<Game> games;
+    public static final String GAMES = "GAMES";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,15 +39,14 @@ public class Games extends Fragment{
 
 //--------------RecyclerView mit Layout verbinden
 
+
         mRecyclerView = (RecyclerView) v.findViewById(R.id.games_list);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
 //--------------Liste
-
         games = new ArrayList<>();
         fetchPopular();
-
 //--------------Liste dem Adapter übergeben
 
         mRecyclerView.setHasFixedSize(true);
@@ -54,14 +60,12 @@ public class Games extends Fragment{
         });
         mRecyclerView.setAdapter(mAdapter);
 
-
         return v;
     }
 
-    //Spiele der Definierten Liste zu Games hinzufügen
     public void fetchPopular()
     {
-        new Thread(new Runnable()
+        Thread t = new Thread(new Runnable()
         {
             @Override
             public void run()
@@ -79,12 +83,16 @@ public class Games extends Fragment{
                     }
                 }
             }
-        }).start();
+        });
+        t.start();
     }
+
+
+
     //Ein bestimmtes Spiel suchen und hinzufügen
     public void fetchSearch(final String name)
     {
-        new Thread(new Runnable()
+        Thread t = new Thread(new Runnable()
         {
             @Override
             public void run()
@@ -98,12 +106,35 @@ public class Games extends Fragment{
                     System.out.print(e);
                 }
             }
-        }).start();
+        });
+        t.start();
+
     }
     //get für Games liste
     public List<Game> getGames()
     {
         return games;
+    }
+
+    public void saveList(){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPreferences", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(games);
+        editor.putString(GAMES, json);
+        editor.apply();
+    }
+
+    public void loadList(){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPreferences", MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString(GAMES, null);
+        Type type = new TypeToken<ArrayList<Game>>() {}.getType();
+        games = gson.fromJson(json, type);
+
+        if(games == null){
+            games = new ArrayList<Game>();
+        }
     }
 }
 

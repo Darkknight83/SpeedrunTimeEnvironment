@@ -1,5 +1,6 @@
 package com.example.speedruntimeenvironment;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -58,7 +59,7 @@ public class GamesAdapter extends RecyclerView.Adapter<GamesAdapter.ViewHolder> 
         //--------------Listener wird an das Item gebunden
 
     public void bind(final Game item, final OnItemClickListener listener){
-        NameView.setText(item.getId());
+        NameView.setText(item.toString());
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 listener.onItemClick(item);
