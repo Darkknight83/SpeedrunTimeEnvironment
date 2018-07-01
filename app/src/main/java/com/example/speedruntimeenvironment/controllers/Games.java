@@ -1,5 +1,6 @@
 package com.example.speedruntimeenvironment.controllers;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import com.example.speedruntimeenvironment.controllers.adapters.GamesRecyclerAda
 import com.example.speedruntimeenvironment.controllers.speedrun.http.SpeedrunRestUsage;
 import com.example.speedruntimeenvironment.daos.api.GamesDAO;
 import com.example.speedruntimeenvironment.daos.impl.GamesDAOImpl;
+import com.example.speedruntimeenvironment.model.Game;
 import com.example.speedruntimeenvironment.model.GameList;
 
 import org.json.JSONException;
@@ -87,7 +89,17 @@ public class Games extends Fragment {
 
         recyclerView = (RecyclerView) v.findViewById(R.id.games_list);
         // adapter = new GamesRecyclerAdapter(getActivity(), mGameNames, mGameImageUrls, mGameIds);
-        adapter = new GamesRecyclerAdapter(getActivity(), this.mGameList.getGameNamesAsStrings(), this.mGameList.getImageUrlAsStrings());
+        adapter = new GamesRecyclerAdapter(getActivity(), this.mGameList.getGameNamesAsStrings(), this.mGameList.getImageUrlAsStrings(), new GamesRecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(String GameID) {
+                Intent intent = new Intent(getActivity(), Sub_MainActivity.class);
+                intent.putExtra("Destination", getString(R.string.overview));
+                intent.putExtra("GameID", GameID);
+                startActivity(intent);
+            }
+        });
+
+
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));

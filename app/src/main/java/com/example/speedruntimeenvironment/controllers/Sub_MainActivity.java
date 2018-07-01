@@ -48,6 +48,14 @@ public class Sub_MainActivity extends AppCompatActivity {
             fragmentTransaction.replace(R.id.sub_content_frame, new Faq());
         if (getTitle().equals(getString(R.string.appinfo)))
             fragmentTransaction.replace(R.id.sub_content_frame, new AppInfo());
+        if (getTitle().equals(getString(R.string.overview)))
+            fragmentTransaction.replace(R.id.sub_content_frame, new Overview());
+        if (getTitle().equals(getString(R.string.streampage)))
+            fragmentTransaction.replace(R.id.sub_content_frame, new Stream());
+        if (getTitle().equals(getString(R.string.leaderboard)))
+            fragmentTransaction.replace(R.id.sub_content_frame, new Leaderboard());
+        if (getTitle().equals(getString(R.string.guides)))
+            fragmentTransaction.replace(R.id.sub_content_frame, new Guides());
 
         fragmentTransaction.commit();
     }

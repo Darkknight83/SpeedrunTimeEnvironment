@@ -1,6 +1,7 @@
 package com.example.speedruntimeenvironment.controllers;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -20,7 +21,9 @@ public class Overview extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.activity_options, container, false);
+        View v = inflater.inflate(R.layout.activity_overview, container, false);
+
+        Intent intent = getActivity().getIntent();
 
         TextView name = v.findViewById(R.id.game_name);
         TextView year = v.findViewById(R.id.game_year);
@@ -28,9 +31,10 @@ public class Overview extends Fragment {
         ImageView Img = v.findViewById(R.id.game_img);
 
         //Hier dann die Objekt-Informationen passend einfügen
-        name.setText("");
-        year.setText("");
-        devices.setText("");
+        name.setText(intent.getStringExtra("GameID"));
+        name.setTextColor(Color.BLACK);
+        year.setText("2017");
+        devices.setText("PC");
         //Img.setImage...
 
         Button leaderboard = (Button) v.findViewById(R.id.btn_leaderboard);

@@ -29,26 +29,11 @@
                     android:gravity="center"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="8sp"
                     android:text="GameName"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
-            </TableRow>
-
-            <TableRow>
-
-                <TextView
-                    android:id="@+id/game_year"
-                    android:layout_weight="2"
-                    android:gravity="center"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:text="GameYear"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/game_name" />
             </TableRow>
 
             <TableRow>
@@ -63,8 +48,24 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/game_year"
+                    app:layout_constraintTop_toBottomOf="@+id/game_name"
                     app:srcCompat="@mipmap/ic_launcher_foreground" />
+
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:id="@+id/game_year"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4sp"
+                    android:text="GameYear"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/game_img" />
 
             </TableRow>
 
@@ -76,11 +77,12 @@
                     android:layout_weight="2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
+                    android:layout_marginBottom="8sp"
                     android:text="GameDevices"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/game_img" />
+                    app:layout_constraintTop_toBottomOf="@+id/game_year" />
+
             </TableRow>
 
             <TableRow>
@@ -89,9 +91,9 @@
                     android:id="@+id/btn_leaderboard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
+                    android:layout_marginTop="0sp"
                     android:layout_weight="2"
-                    android:minHeight="80dp"
+                    android:minHeight="80sp"
                     android:text="@string/leaderboard"
                     android:textAllCaps="false"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -105,9 +107,9 @@
                     android:id="@+id/btn_guides"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
+                    android:layout_marginTop="0sp"
                     android:layout_weight="2"
-                    android:minHeight="80dp"
+                    android:minHeight="80sp"
                     android:text="@string/guides"
                     android:textAllCaps="false"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -121,9 +123,9 @@
                     android:id="@+id/btn_streams"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="0dp"
+                    android:layout_marginTop="0sp"
                     android:layout_weight="2"
-                    android:minHeight="80dp"
+                    android:minHeight="80sp"
                     android:text="@string/streams"
                     android:textAllCaps="false"
                     app:layout_constraintEnd_toEndOf="parent"

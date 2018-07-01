@@ -29,17 +29,21 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
     private List<String> mImages = null;
     // private List<String> mIds = null;
 
+    public interface OnItemClickListener {
+        void onItemClick(String GameID);
+    }
 
+    private final OnItemClickListener listener;
 
-
-    private Context mContext;
+    private static Context mContext;
     private View view;
 
-    public GamesRecyclerAdapter(Context context, List<String> imageNames, List<String> images) {
+    public GamesRecyclerAdapter(Context context, List<String> imageNames, List<String> images, OnItemClickListener listener) {
         mImageNames = imageNames;
         mImages = images;
         // mIds = ids;
         mContext = context;
+        this.listener = listener;
     }
 
     @NonNull
@@ -52,6 +56,9 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
 
     @Override
     public void onBindViewHolder(@NonNull GameViewHolder holder, int position) {
+        holder.bind(mImageNames.get(position), listener);
+
+
         Log.d(TAG, "onBindViewHolder: called");
 
 
@@ -70,12 +77,6 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
 
         // set image name
         holder.imageName.setText(mImageNames.get(position));
-
-        holder.parentLayout.setOnClickListener(v -> {
-            Log.d(TAG, "onClick: clicked on " + mImageNames.get(position));
-            //To-Do hier müsste das Overviewfragment aufgerufen werden. Mit intent des Namens vom Zielfragment und der GameID
-            //ist im Adapter nicht möglich
-        });
     }
 
     @Override
@@ -98,7 +99,7 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
     */
 
     // holds each element of the list in memory
-    public class GameViewHolder extends RecyclerView.ViewHolder {
+    public static class GameViewHolder extends RecyclerView.ViewHolder {
 
         CircleImageView image;
         TextView imageName;
@@ -110,7 +111,15 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
             image = itemView.findViewById(R.id.image);
             imageName = itemView.findViewById(R.id.image_name); // todo
             parentLayout = itemView.findViewById(R.id.parent_layout);
+
+        }
+
+        public void bind(final String GameID, final OnItemClickListener listener){
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    listener.onItemClick(GameID);
+                }
+            });
         }
     }
-
 }
