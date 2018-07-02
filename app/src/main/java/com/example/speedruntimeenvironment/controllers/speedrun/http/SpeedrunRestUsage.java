@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.speedruntimeenvironment.controllers.adapters.GamesRecyclerAdapter;
+import com.example.speedruntimeenvironment.controllers.callbacks.GameInfoCallback;
 import com.example.speedruntimeenvironment.model.Game;
 import com.example.speedruntimeenvironment.model.GameList;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -34,6 +35,8 @@ import cz.msebera.android.httpclient.Header;
 public class SpeedrunRestUsage {
     private static final String TAG = "SpeedrunRestUsage";
 
+
+    /*
     public void getGamesBulk(GamesRecyclerAdapter adapter) {
 
         Log.d(TAG, "getGamesBulk: START");
@@ -118,7 +121,9 @@ public class SpeedrunRestUsage {
         return retVal.get();
 
     }
+    */
 
+    /*
     public Game getGameInfos(String gameId, final TextView name, final TextView year, final TextView devices, final ImageView img) {
         Log.d(TAG, "getGameInfos: START");
 
@@ -129,6 +134,7 @@ public class SpeedrunRestUsage {
         String url = "/games/" + gameId;
 
         // final AtomicReference<Game> retVal = new AtomicReference<>();
+
 
         SpeedrunRestClient.get(url, params, new JsonHttpResponseHandler() {
             @Override
@@ -190,5 +196,40 @@ public class SpeedrunRestUsage {
 
         // return retVal.get();
         return game;
+    }
+    */
+
+
+    public void getGameInfos(String gameId, GameInfoCallback gameInfoCallback) {
+        Log.d(TAG, "getGameInfos: START");
+
+        RequestParams params = new RequestParams();
+
+        params.put("embed", "platforms");
+
+        String url = "/games/" + gameId;
+
+        SpeedrunRestClient.get(url, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    Log.d(TAG, "onSuccess: START");
+                    Game game = Game.fromJson(response);
+
+                    
+                    gameInfoCallback.onSuccess(game);
+                    
+                } catch (JSONException e) {
+                    Log.e(TAG, "onSuccess: Fehler beim Konvertieren der JSON", e);
+                    gameInfoCallback.onFail();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.e(TAG, "onFailure: JSON konnte fuer Game nicht geholt werden", throwable); // TODO ggf toast
+                gameInfoCallback.onFail();
+            }
+        });
     }
 }

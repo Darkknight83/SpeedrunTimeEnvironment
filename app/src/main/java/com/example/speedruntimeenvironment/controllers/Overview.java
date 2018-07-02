@@ -10,8 +10,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.speedruntimeenvironment.R;
+import com.example.speedruntimeenvironment.controllers.callbacks.GameInfoCallback;
 import com.example.speedruntimeenvironment.controllers.speedrun.http.SpeedrunRestUsage;
 import com.example.speedruntimeenvironment.model.Game;
 
@@ -42,18 +44,46 @@ public class Overview extends Fragment {
 
         String gameId = intent.getStringExtra("GameID");
 
-        Game game = client.getGameInfos(gameId, name, year, devices, img);
+        // Game gameAlt = client.getGameInfos(gameId, name, year, devices, img);
+
+        client.getGameInfos(gameId, new GameInfoCallback() {
+
+            @Override
+            public void onSuccess(Game game) {
+                // update UI
+                Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
+
+                StringBuilder platforms = new StringBuilder();
+                List<String> platList = game.getPlatforms();
+                for(String p : platList) {
+                    platforms.append(p);
+                    platforms.append(", ");       // TODO: Leo: String richtig generieren, dass komma richtg sind
+                }
+
+
+                name.setText(game.getName());
+                year.setText(String.valueOf(game.getReleaseYear()));
+                devices.setText(platforms.toString());
+
+
+            }
+
+            @Override
+            public void onFail() {
+                Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
+            }
+        });
 
 
 
-        name.setText(intent.getStringExtra("GameID"));
+        // name.setText(intent.getStringExtra("GameID"));
         name.setTextColor(Color.BLACK);
-        year.setText( String.valueOf(game.getReleaseYear()));
+        // year.setText( String.valueOf(game.getReleaseYear()));
 
 
 
-        devices.setText("");
-        //Img.setImage...
+        // devices.setText("");
+        // Img.setImage...
 
         Button leaderboard = (Button) v.findViewById(R.id.btn_leaderboard);
         leaderboard.setOnClickListener(new View.OnClickListener() {
