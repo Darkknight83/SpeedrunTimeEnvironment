@@ -5,6 +5,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Game {
     private String id;
 
@@ -15,6 +18,12 @@ public class Game {
     private String weblink;
 
     private String urlImage;
+
+    private int releaseYear;
+
+    private List<String> platforms;
+
+
 
     public Game() {
 
@@ -31,10 +40,23 @@ public class Game {
     public static Game fromJson(JSONObject obj) throws JSONException{
         Game game = new Game();
 
-        JSONObject root = obj.getJSONObject("data");
+        JSONObject root = obj.getJSONObject("data");    // TODO root in data umbennen
 
 
-        game.setUrlImage(root.getJSONObject("assets").getJSONObject("cover-small").getString("uri"));
+        game.setReleaseYear(root.getInt("released"));
+
+        List<String> platforms = new ArrayList<>();
+        JSONArray platData = root.getJSONObject("platforms").getJSONArray("data");
+
+        for(int i = 0; i < platData.length(); i++)
+        {
+            JSONObject plat = (JSONObject)platData.get(i);
+            platforms.add(plat.getString("name"));
+        }
+
+        game.setPlatforms(platforms);
+
+        game.setUrlImage(root.getJSONObject("assets").getJSONObject("cover-medium").getString("uri"));
 
         return game;
     }
@@ -77,5 +99,21 @@ public class Game {
 
     public void setUrlImage(String urlImage) {
         this.urlImage = urlImage;
+    }
+
+    public int getReleaseYear() {
+        return this.releaseYear;
+    }
+
+    public void setReleaseYear(int releaseYear) {
+        this.releaseYear = releaseYear;
+    }
+
+    public List<String> getPlatforms() {
+        return platforms;
+    }
+
+    public void setPlatforms(List<String> platforms) {
+        this.platforms = platforms;
     }
 }

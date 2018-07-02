@@ -27,7 +27,7 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
 
     private List<String> mImageNames = null;
     private List<String> mImages = null;
-    // private List<String> mIds = null;
+    private List<String> mIds = null;
 
     public interface OnItemClickListener {
         void onItemClick(String GameID);
@@ -38,10 +38,10 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
     private static Context mContext;
     private View view;
 
-    public GamesRecyclerAdapter(Context context, List<String> imageNames, List<String> images, OnItemClickListener listener) {
+    public GamesRecyclerAdapter(Context context, List<String> imageNames, List<String> images, List<String> ids, OnItemClickListener listener) {
         mImageNames = imageNames;
         mImages = images;
-        // mIds = ids;
+        mIds = ids;
         mContext = context;
         this.listener = listener;
     }
@@ -56,20 +56,13 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
 
     @Override
     public void onBindViewHolder(@NonNull GameViewHolder holder, int position) {
-        holder.bind(mImageNames.get(position), listener);
-
 
         Log.d(TAG, "onBindViewHolder: called");
 
-
+        holder.bind(mIds.get(position), listener);
 
         // get images
-        /*
-        Glide.with(mContext)
-                .asBitmap()
-                .load(mImages.get(position))    // image url
-                .into(holder.image);
-        */
+
         Glide.with(mContext)
                 .asBitmap()
                 .load(mImages.get(position))    // image url
@@ -92,11 +85,11 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
         this.mImages = imageUrls;
     }
 
-    /*
+
     public void setIds(List<String> ids) {
         this.mIds = ids;
     }
-    */
+
 
     // holds each element of the list in memory
     public static class GameViewHolder extends RecyclerView.ViewHolder {

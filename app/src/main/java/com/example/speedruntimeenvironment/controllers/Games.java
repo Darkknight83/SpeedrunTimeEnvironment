@@ -89,7 +89,7 @@ public class Games extends Fragment {
 
         recyclerView = (RecyclerView) v.findViewById(R.id.games_list);
         // adapter = new GamesRecyclerAdapter(getActivity(), mGameNames, mGameImageUrls, mGameIds);
-        adapter = new GamesRecyclerAdapter(getActivity(), this.mGameList.getGameNamesAsStrings(), this.mGameList.getImageUrlAsStrings(), new GamesRecyclerAdapter.OnItemClickListener() {
+        adapter = new GamesRecyclerAdapter(getActivity(), this.mGameList.getGameNamesAsStrings(), this.mGameList.getImageUrlAsStrings(), this.mGameList.getIdsAsStrings(), new GamesRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String GameID) {
                 Intent intent = new Intent(getActivity(), Sub_MainActivity.class);

@@ -1,7 +1,13 @@
 package com.example.speedruntimeenvironment.controllers.speedrun.http;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.Adapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.speedruntimeenvironment.controllers.adapters.GamesRecyclerAdapter;
 import com.example.speedruntimeenvironment.model.Game;
@@ -9,15 +15,21 @@ import com.example.speedruntimeenvironment.model.GameList;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import cz.msebera.android.httpclient.Header;
+
 
 public class SpeedrunRestUsage {
     private static final String TAG = "SpeedrunRestUsage";
@@ -107,4 +119,76 @@ public class SpeedrunRestUsage {
 
     }
 
+    public Game getGameInfos(String gameId, final TextView name, final TextView year, final TextView devices, final ImageView img) {
+        Log.d(TAG, "getGameInfos: START");
+
+        RequestParams params = new RequestParams();
+
+        params.put("embed", "platforms");
+
+        String url = "/games/" + gameId;
+
+        // final AtomicReference<Game> retVal = new AtomicReference<>();
+
+        SpeedrunRestClient.get(url, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                try {
+                    Game game = Game.fromJson(response);
+
+                    // retVal.set(game);
+
+                    name.setText(game.getName());
+
+                    year.setText(String.valueOf(game.getReleaseYear()));
+
+                    // generiere String für platforms
+                    StringBuilder platforms = new StringBuilder();
+                    List<String> platList = game.getPlatforms();
+                    for(String p : platList) {
+                        platforms.append(p);
+                        platforms.append(", ");       // TODO: Leo: String richtig generieren, dass komma richtg sind
+                    }
+
+                    // get image from url
+                    try {
+
+                        URL url = new URL(game.getUrlImage());
+                        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                        connection.setDoInput(true);
+                        connection.connect();
+                        InputStream input = connection.getInputStream();
+                        Bitmap myBitmap = BitmapFactory.decodeStream(input);
+
+                        img.setImageBitmap(myBitmap);
+
+                        Log.d(TAG, "onSuccess: Image set");
+                    } catch (IOException e) {
+                        Log.e(TAG, "onSuccess: Image konnte nicht ausgelesen werden", e);
+                    }
+
+
+                    devices.setText(platforms.toString());
+                    // imageview: bild holen und setzen
+                } catch (JSONException e) {
+                    Log.e(TAG, "onSuccess: Fehler beim Konvertieren der JSON", e);
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.e(TAG, "onFailure: JSON konnte fuer Game nicht geholt werden", throwable); // TODO ggf toast
+            }
+        });
+
+        Game game = new Game();
+
+        game.setUrlImage("https://imgsv.imaging.nikon.com/lineup/lens/zoom/normalzoom/af-s_dx_18-140mmf_35-56g_ed_vr/img/sample/img_04.jpg");
+        game.setPlatforms(Collections.<String>emptyList());
+        game.setReleaseYear(1998);
+        game.setId("12345");
+
+        // return retVal.get();
+        return game;
+    }
 }

@@ -12,8 +12,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.speedruntimeenvironment.R;
+import com.example.speedruntimeenvironment.controllers.speedrun.http.SpeedrunRestUsage;
+import com.example.speedruntimeenvironment.model.Game;
+
+import java.util.List;
 
 public class Overview extends Fragment {
+
+    private SpeedrunRestUsage client;
 
     private String GameID;
 
@@ -23,18 +29,30 @@ public class Overview extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.activity_overview, container, false);
 
+        client = new SpeedrunRestUsage();
+
         Intent intent = getActivity().getIntent();
 
         TextView name = v.findViewById(R.id.game_name);
         TextView year = v.findViewById(R.id.game_year);
         TextView devices = v.findViewById(R.id.game_devices);
-        ImageView Img = v.findViewById(R.id.game_img);
+        ImageView img = v.findViewById(R.id.game_img);
 
         //Hier dann die Objekt-Informationen passend einfügen
+
+        String gameId = intent.getStringExtra("GameID");
+
+        Game game = client.getGameInfos(gameId, name, year, devices, img);
+
+
+
         name.setText(intent.getStringExtra("GameID"));
         name.setTextColor(Color.BLACK);
-        year.setText("2017");
-        devices.setText("PC");
+        year.setText( String.valueOf(game.getReleaseYear()));
+
+
+
+        devices.setText("");
         //Img.setImage...
 
         Button leaderboard = (Button) v.findViewById(R.id.btn_leaderboard);
