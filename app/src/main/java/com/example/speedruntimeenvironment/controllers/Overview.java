@@ -51,7 +51,6 @@ public class Overview extends Fragment {
             @Override
             public void onSuccess(Game game) {
                 // update UI
-                Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
 
                 StringBuilder platforms = new StringBuilder();
                 List<String> platList = game.getPlatforms();
@@ -70,7 +69,7 @@ public class Overview extends Fragment {
 
             @Override
             public void onFail() {
-                Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -92,6 +91,7 @@ public class Overview extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), Sub_MainActivity.class);
                 intent.putExtra("Destination", getString(R.string.leaderboard));
+                intent.putExtra("GameID", gameId);
                 startActivity(intent);
             }
         });
@@ -103,6 +103,7 @@ public class Overview extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), Sub_MainActivity.class);
                 intent.putExtra("Destination", getString(R.string.guides));
+                intent.putExtra("GameID", gameId);
                 startActivity(intent);
             }
         });
@@ -114,7 +115,7 @@ public class Overview extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), Sub_MainActivity.class);
                 intent.putExtra("Destination", getString(R.string.streampage));
-                intent.putExtra("GameID", getGameID());
+                intent.putExtra("GameID", gameId);
                 startActivity(intent);
             }
         });
@@ -122,7 +123,4 @@ public class Overview extends Fragment {
         return v;
     }
 
-    public String getGameID(){
-        return GameID;
-    }
 }
