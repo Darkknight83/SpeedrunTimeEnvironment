@@ -5,10 +5,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game {
+public class Game implements Serializable{
     private String id;
 
     private String name;
@@ -44,6 +45,10 @@ public class Game {
 
 
         game.setReleaseYear(root.getInt("released"));
+
+        game.setName(root.getJSONObject("names").getString("international"));
+
+        game.setAbbreviation(root.getString("abbreviation"));
 
         List<String> platforms = new ArrayList<>();
         JSONArray platData = root.getJSONObject("platforms").getJSONArray("data");
