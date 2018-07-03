@@ -250,7 +250,7 @@ public class SpeedrunRestUsage {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.d(TAG, "onFailure: START");
+                Log.d(TAG, "onFailure: START ");
             }
         });
     }
