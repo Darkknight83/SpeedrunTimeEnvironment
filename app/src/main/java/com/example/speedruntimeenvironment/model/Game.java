@@ -45,6 +45,10 @@ public class Game {
 
         game.setReleaseYear(root.getInt("released"));
 
+        game.setName(root.getJSONObject("names").getString("international"));
+
+        game.setAbbreviation(root.getString("abbreviation"));
+
         List<String> platforms = new ArrayList<>();
         JSONArray platData = root.getJSONObject("platforms").getJSONArray("data");
 

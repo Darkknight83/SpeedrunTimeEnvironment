@@ -1,6 +1,7 @@
 package com.example.speedruntimeenvironment.controllers;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -13,17 +14,28 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.speedruntimeenvironment.R;
+import com.example.speedruntimeenvironment.controllers.callbacks.GameImageCallback;
 import com.example.speedruntimeenvironment.controllers.callbacks.GameInfoCallback;
 import com.example.speedruntimeenvironment.controllers.speedrun.http.SpeedrunRestUsage;
 import com.example.speedruntimeenvironment.model.Game;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Overview extends Fragment {
 
     private SpeedrunRestUsage client;
 
     private String GameID;
+
+    private TextView name, year, devices;
+
+    private ImageView imageView;
+
+    private AtomicReference<Game> mGame = new AtomicReference<>();
+
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,10 +47,10 @@ public class Overview extends Fragment {
 
         Intent intent = getActivity().getIntent();
 
-        TextView name = v.findViewById(R.id.game_name);
-        TextView year = v.findViewById(R.id.game_year);
-        TextView devices = v.findViewById(R.id.game_devices);
-        ImageView img = v.findViewById(R.id.game_img);
+        name = v.findViewById(R.id.game_name);
+        year = v.findViewById(R.id.game_year);
+        devices = v.findViewById(R.id.game_devices);
+        imageView = v.findViewById(R.id.game_img);
 
         //Hier dann die Objekt-Informationen passend einfügen
 
@@ -50,9 +62,8 @@ public class Overview extends Fragment {
 
             @Override
             public void onSuccess(Game game) {
-                // update UI
-                Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
 
+                // update UI
                 StringBuilder platforms = new StringBuilder();
                 List<String> platList = game.getPlatforms();
                 for(String p : platList) {
@@ -61,18 +72,31 @@ public class Overview extends Fragment {
                 }
 
 
+
                 name.setText(game.getName());
                 year.setText(String.valueOf(game.getReleaseYear()));
                 devices.setText(platforms.toString());
 
 
+                mGame.set(game);
+
+                client.getUrl(mGame.get().getUrlImage(), new GameImageCallback() {
+                    @Override
+                    public void gameImgLoaded(Bitmap img) {
+                        imageView.setImageBitmap(img);
+                    }
+                });
+
             }
 
             @Override
             public void onFail() {
-                Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Couldn't receive Game Info", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+
 
 
 

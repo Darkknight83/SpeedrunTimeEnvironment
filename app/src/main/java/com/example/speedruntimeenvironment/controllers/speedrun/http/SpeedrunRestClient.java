@@ -15,6 +15,13 @@ public class SpeedrunRestClient {
         client.get(getAbsoluteUrl(url), params, responseHandler);
     }
 
+    public static void getAbsolute(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
+        client.get(url, params, responseHandler);
+    }
+
+
+
+
     private static String getAbsoluteUrl(String relativeUrl) {
         StringBuilder sb = new StringBuilder(BASE_URL);
         sb.append(relativeUrl);

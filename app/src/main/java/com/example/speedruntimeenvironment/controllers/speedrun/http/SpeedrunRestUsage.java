@@ -10,9 +10,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.speedruntimeenvironment.controllers.adapters.GamesRecyclerAdapter;
+import com.example.speedruntimeenvironment.controllers.callbacks.GameImageCallback;
 import com.example.speedruntimeenvironment.controllers.callbacks.GameInfoCallback;
 import com.example.speedruntimeenvironment.model.Game;
 import com.example.speedruntimeenvironment.model.GameList;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.BinaryHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -229,6 +232,25 @@ public class SpeedrunRestUsage {
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 Log.e(TAG, "onFailure: JSON konnte fuer Game nicht geholt werden", throwable); // TODO ggf toast
                 gameInfoCallback.onFail();
+            }
+        });
+    }
+
+    public void getUrl(String url, final GameImageCallback callback)
+    {
+        Log.d(TAG, "getUrl: START");
+
+        SpeedrunRestClient.getAbsolute(url, null, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                Bitmap image = BitmapFactory.decodeByteArray(responseBody, 0, responseBody.length);
+
+                callback.gameImgLoaded(image);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Log.d(TAG, "onFailure: START");
             }
         });
     }
