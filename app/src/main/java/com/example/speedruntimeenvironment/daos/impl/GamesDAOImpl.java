@@ -13,10 +13,15 @@ import org.json.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +93,42 @@ public class GamesDAOImpl implements GamesDAO {
 
         return games;
 
+    }
+
+    @Override
+    public List<Game> getFavoriteGamesFromFile(String games_file, Context context) throws IOException
+    {
+        FileInputStream fis;
+        List<Game> favorites = null;
+        try
+        {
+            fis = context.openFileInput(games_file);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            favorites = (List<Game>)ois.readObject();
+            ois.close();
+        }
+        catch(Exception e)
+        {
+            Log.e(TAG, "favoriteGamesToFile: cannot find file ", e);
+        }
+        return favorites;
+    }
+
+    public void favoriteGamesToFile(String games_file, Context context,List<Game> favorites) throws IOException
+    {
+        File favorite_games = new File(context.getFilesDir(), games_file);
+        FileOutputStream fos;
+        try
+        {
+            fos = context.openFileOutput(games_file, Context.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(favorites);
+            oos.close();
+        }
+        catch(Exception e)
+        {
+            Log.e(TAG, "favoriteGamesToFile: cannot find file ", e);
+        }
     }
 
 }
