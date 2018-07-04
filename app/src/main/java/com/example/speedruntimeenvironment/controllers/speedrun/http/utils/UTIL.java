@@ -6,11 +6,12 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class HttpUtils {
-    private static final String TAG = "HttpUtils";
+public class UTIL {
+    private static final String TAG = "UTIL";
 
     public static Bitmap getBitmapFromURL(String src) {
         try {
@@ -27,6 +28,16 @@ public class HttpUtils {
         }
     }
 
+    public static int[] erzeugeTimeFormat(long num)
+    {
+        Log.i(TAG, "erzeugeTimeFormat: START");
+        int hours = (int) num / 3600;
+        int remainder = (int) num - hours * 3600;
+        int mins = remainder / 60;
+        remainder = remainder - mins * 60;
+        int secs = remainder;
 
-
+        int[] ints = {hours , mins , secs};
+        return ints;
+    }
 }

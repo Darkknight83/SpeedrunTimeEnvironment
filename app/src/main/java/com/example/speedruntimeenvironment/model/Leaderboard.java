@@ -34,7 +34,7 @@ public class Leaderboard implements Serializable{
 
         List<Run> runs = new ArrayList<>();
 
-        for(int i = 0; i < runsJson.length() || i < 10; i++) {
+        for(int i = 0; i < runsJson.length() && i < 10; i++) {
                 runs.add(Run.fromJson(runsJson.getJSONObject(i), playerJson.getJSONObject(i)));
         }
 

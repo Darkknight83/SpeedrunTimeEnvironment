@@ -17,11 +17,13 @@ import com.example.speedruntimeenvironment.R;
 import com.example.speedruntimeenvironment.controllers.adapters.LeaderRecyclerAdapter;
 import com.example.speedruntimeenvironment.controllers.callbacks.LeaderboardCallback;
 import com.example.speedruntimeenvironment.controllers.speedrun.http.SpeedrunRestUsage;
+import com.example.speedruntimeenvironment.controllers.speedrun.http.utils.UTIL;
 import com.example.speedruntimeenvironment.model.Category;
 import com.example.speedruntimeenvironment.model.Game;
 import com.example.speedruntimeenvironment.model.GameList;
 import com.example.speedruntimeenvironment.model.Run;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -66,6 +68,7 @@ public class Leaderboard extends Fragment {
                 Log.d(TAG, "onLeaderboardReceived: " + leaderboard);
                 mLeaderboard.set(leaderboard);
                 updateRecycler(mLeaderboard.get());
+
             }
         });
 
@@ -94,7 +97,15 @@ public class Leaderboard extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 Toast.makeText(getActivity(), tab.getText(), Toast.LENGTH_SHORT).show();
 
-
+                client.getLeaderboardsToCategories(mGame.getId(), mGame.getCategories().get(tab.getPosition()).getCategoryId(), new LeaderboardCallback() {
+                    @Override
+                    public void onLeaderboardReceived(com.example.speedruntimeenvironment.model.Leaderboard leaderboard) {
+                        Log.d(TAG, "onLeaderboardReceived: " + leaderboard);
+                        mLeaderboard.set(leaderboard);
+                        updateRecycler(mLeaderboard.get());
+                        adapter.notifyDataSetChanged();
+                    }
+                });
                 // updateRecycler(getListe(tab.getText()), tab.getPosition()); anhand des Tabnames die richtige Liste für die Kategorie erstellen/wählen
             }
 
@@ -116,7 +127,7 @@ public class Leaderboard extends Fragment {
 
         // updateRecycler(getListe(tab.getText()));
 
-        recyclerView.setAdapter(adapter);
+        // recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
@@ -127,14 +138,32 @@ public class Leaderboard extends Fragment {
 
 
     public void updateRecycler(com.example.speedruntimeenvironment.model.Leaderboard leaderboard){
-
         List<String> platforms = new ArrayList<>();
         for(Run r : leaderboard.getRuns()) {
             platforms.add(leaderboard.getPlatform());
         }
 
+        // transformiere Sekunden in lesbares Format
 
-        adapter = new LeaderRecyclerAdapter(getActivity(),  leaderboard.getRanksAsStrings(), leaderboard.getPlayerNamesAsStrings(), leaderboard.getTimeAsStrings(), platforms, new LeaderRecyclerAdapter.OnItemClickListener() {
+        List<String> times = leaderboard.getTimeAsStrings();
+        List<String> formattedTimes = new ArrayList<>();
+
+        for(String t : times) {
+
+            StringBuilder formatted = new StringBuilder();
+            int[] hms = UTIL.erzeugeTimeFormat(Long.parseLong(t));
+
+
+            formatted.append(hms[0]);
+            formatted.append(":");
+            formatted.append(hms[1]);
+            formatted.append(":");
+            formatted.append(hms[2]);
+
+            formattedTimes.add(formatted.toString());
+        }
+
+        adapter = new LeaderRecyclerAdapter(getActivity(),  leaderboard.getRanksAsStrings(), leaderboard.getPlayerNamesAsStrings(), formattedTimes, platforms, new LeaderRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String RankID) {
 
@@ -144,6 +173,8 @@ public class Leaderboard extends Fragment {
         recyclerView.setAdapter(adapter);
 
     }
+
+
 
 
 }

@@ -35,7 +35,7 @@ public class GamesRecyclerAdapter extends RecyclerView.Adapter<GamesRecyclerAdap
 
     private final OnItemClickListener listener;
 
-    private static Context mContext;
+    private Context mContext;
     private View view;
 
     public GamesRecyclerAdapter(Context context, List<String> imageNames, List<String> images, List<String> ids, OnItemClickListener listener) {

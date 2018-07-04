@@ -36,7 +36,7 @@ public class LeaderRecyclerAdapter extends RecyclerView.Adapter<LeaderRecyclerAd
 
     private final OnItemClickListener listener;
 
-    private static Context mContext;
+    private Context mContext;
     private View view;
 
     public LeaderRecyclerAdapter(Context context, List<String> rank, List<String> player, List<String> time, List<String> platform, OnItemClickListener listener) {
