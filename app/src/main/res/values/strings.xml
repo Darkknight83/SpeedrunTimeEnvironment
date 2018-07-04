@@ -4,7 +4,6 @@
     <string name="streams">Streams</string>
     <string name="streampage">Stream</string>
     <string name="leaderboard">Leaderboard</string>
-    <string name="guides">Guides</string>
     <string name="options">Options</string>
     <string name="favorites">Favorites</string>
     <string name="notifications">Notifications</string>
@@ -20,4 +19,9 @@
     <string name="overview">Overview</string>
     <string name="opendrawer">opendrawer</string>
     <string name="closedrawer">closedrawer</string>
+    <string name="rank">Rank</string>
+    <string name="player">Player</string>
+    <string name="time">Time</string>
+    <string name="platform">Platform</string>
+    <string name="all">All</string>
 </resources>

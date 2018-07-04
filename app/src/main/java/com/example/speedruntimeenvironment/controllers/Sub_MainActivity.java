@@ -56,8 +56,6 @@ public class Sub_MainActivity extends AppCompatActivity {
             fragmentTransaction.replace(R.id.sub_content_frame, new Stream());
         if (getTitle().equals(getString(R.string.leaderboard)))
             fragmentTransaction.replace(R.id.sub_content_frame, new Leaderboard());
-        if (getTitle().equals(getString(R.string.guides)))
-            fragmentTransaction.replace(R.id.sub_content_frame, new Guides());
 
         fragmentTransaction.commit();
     }

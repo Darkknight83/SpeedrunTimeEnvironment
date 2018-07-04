@@ -86,7 +86,9 @@ public class Leaderboard extends Fragment {
 
 //----------Hier werden die Kategorien in das Tablayout geladen
         for (String a: categories) {
-            tabLayout.addTab(tabLayout.newTab().setText(a));
+            if(tabLayout.getTabCount()<5) {
+                tabLayout.addTab(tabLayout.newTab().setText(a));
+            }
         }
 //---------------- Set the tabs to fill the entire layout.
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
@@ -95,8 +97,6 @@ public class Leaderboard extends Fragment {
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                Toast.makeText(getActivity(), tab.getText(), Toast.LENGTH_SHORT).show();
-
                 client.getLeaderboardsToCategories(mGame.getId(), mGame.getCategories().get(tab.getPosition()).getCategoryId(), new LeaderboardCallback() {
                     @Override
                     public void onLeaderboardReceived(com.example.speedruntimeenvironment.model.Leaderboard leaderboard) {

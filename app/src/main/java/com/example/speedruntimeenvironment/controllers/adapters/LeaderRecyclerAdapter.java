@@ -100,7 +100,6 @@ public class LeaderRecyclerAdapter extends RecyclerView.Adapter<LeaderRecyclerAd
         TextView tplayer;
         TextView ttime;
         TextView tplatform;
-        TextView tdate;
         RelativeLayout leaderLayout;
 
         public LeaderViewHolder(View itemView) {
@@ -110,7 +109,6 @@ public class LeaderRecyclerAdapter extends RecyclerView.Adapter<LeaderRecyclerAd
             tplayer = itemView.findViewById(R.id.player);
             ttime = itemView.findViewById(R.id.time);
             tplatform = itemView.findViewById(R.id.platform);
-            tdate = itemView.findViewById(R.id.date);
 
             leaderLayout = itemView.findViewById(R.id.leader_layout);
 

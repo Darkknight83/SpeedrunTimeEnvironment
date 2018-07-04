@@ -26,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
 
     //Toolbar Items, die sichtbar gemacht oder versteckt werden können
     private MenuItem search;
-    private MenuItem filter;
+    private MenuItem favs;
+    private MenuItem all;
 
     private DrawerLayout mDrawerLayout;
 
@@ -87,28 +88,32 @@ public class MainActivity extends AppCompatActivity {
                                 page = new Games();
                                 setTitle(getString(R.string.games));
                                 search.setVisible(true);
-                                filter.setVisible(true);
+                                favs.setVisible(true);
+                                all.setVisible(false);
                                 break;
 
                             case R.id.nav_streams:
                                 page = new Streams();
                                 setTitle(getString(R.string.streams));
                                 search.setVisible(true);
-                                filter.setVisible(true);
+                                favs.setVisible(true);
+                                all.setVisible(false);
                                 break;
 
                             case R.id.nav_options:
                                 page = new Options();
                                 setTitle(getString(R.string.options));
                                 search.setVisible(false);
-                                filter.setVisible(false);
+                                favs.setVisible(false);
+                                all.setVisible(false);
                                 break;
 
                             default:
                                 page = new Games();
                                 setTitle(getString(R.string.games));
                                 search.setVisible(true);
-                                filter.setVisible(true);
+                                favs.setVisible(true);
+                                all.setVisible(false);
                                 break;
                         }
 
@@ -129,7 +134,9 @@ public class MainActivity extends AppCompatActivity {
 
         //um die Items ansteuern zu können
         search = menu.findItem(R.id.action_search);
-        filter = menu.findItem(R.id.action_filter);
+        favs = menu.findItem(R.id.action_favs);
+        all = menu.findItem(R.id.action_all);
+        all.setVisible(false);
 
         return true;
     }
@@ -142,6 +149,16 @@ public class MainActivity extends AppCompatActivity {
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.action_search:
+                return true;
+
+            case R.id.action_favs:
+                favs.setVisible(false);
+                all.setVisible(true);
+                return true;
+            case R.id.action_all:
+                favs.setVisible(true);
+                all.setVisible(false);
+                return true;
 
         }
         return super.onOptionsItemSelected(item);

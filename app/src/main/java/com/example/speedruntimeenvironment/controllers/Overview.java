@@ -155,17 +155,6 @@ public class Overview extends Fragment {
             }
         });
 
-        Button guides = (Button) v.findViewById(R.id.btn_guides);
-        guides.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), Sub_MainActivity.class);
-                intent.putExtra("Destination", getString(R.string.guides));
-                intent.putExtra("GameID", gameId);
-                startActivity(intent);
-            }
-        });
 
         Button streams = (Button) v.findViewById(R.id.btn_streams);
         streams.setOnClickListener(new View.OnClickListener() {
