@@ -150,6 +150,7 @@ public class Overview extends Fragment {
                 Intent intent = new Intent(getActivity(), Sub_MainActivity.class);
                 intent.putExtra("Destination", getString(R.string.leaderboard));
                 intent.putExtra("GameID", gameId);
+                intent.putExtra("game", mGame.get());
                 startActivity(intent);
             }
         });

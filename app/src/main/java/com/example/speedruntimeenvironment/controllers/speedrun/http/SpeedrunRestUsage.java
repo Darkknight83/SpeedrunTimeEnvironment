@@ -223,8 +223,6 @@ public class SpeedrunRestUsage {
                 try {
                     Log.d(TAG, "onSuccess: START");
                     Game game = Game.fromJson(response);
-
-                    
                     gameInfoCallback.onSuccess(game);
                     
                 } catch (JSONException e) {
@@ -294,6 +292,9 @@ public class SpeedrunRestUsage {
         sb.append(gameId);
         sb.append("/category/");
         sb.append(catId);
+        sb.append("?top=10&embed=players,platforms");
+
+
 
         SpeedrunRestClient.get(sb.toString(), null, new JsonHttpResponseHandler() {
             @Override
@@ -308,8 +309,9 @@ public class SpeedrunRestUsage {
                 leaderboardCallback.onLeaderboardReceived(leaderboard);
             }
 
+
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 Log.e(TAG, "onFailure: Unsuccessful request", throwable);
             }
         });

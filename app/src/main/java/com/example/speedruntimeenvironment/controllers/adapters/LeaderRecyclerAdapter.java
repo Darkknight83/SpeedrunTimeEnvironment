@@ -39,13 +39,12 @@ public class LeaderRecyclerAdapter extends RecyclerView.Adapter<LeaderRecyclerAd
     private static Context mContext;
     private View view;
 
-    public LeaderRecyclerAdapter(Context context, List<String> rank, List<String> player, List<String> time, List<String> platform, List<String> date,OnItemClickListener listener) {
+    public LeaderRecyclerAdapter(Context context, List<String> rank, List<String> player, List<String> time, List<String> platform, OnItemClickListener listener) {
+        mContext = context;
         this.rank = rank;
         this.player = player;
         this.time = time;
         this.platform = platform;
-        this.date = date;
-        mContext = context;
         this.listener = listener;
     }
 
@@ -68,7 +67,7 @@ public class LeaderRecyclerAdapter extends RecyclerView.Adapter<LeaderRecyclerAd
         holder.tplayer.setText(player.get(position));
         holder.ttime.setText(time.get(position));
         holder.tplatform.setText(platform.get(position));
-        holder.tdate.setText(date.get(position));
+        // holder.tdate.setText(date.get(position));
 
     }
 

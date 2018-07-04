@@ -4,7 +4,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Category {
+import java.io.Serializable;
+
+public class Category implements Serializable{
 
     private String categoryId;
 
@@ -19,6 +21,7 @@ public class Category {
 
         cat.setCategoryId(obj.getString("id"));
         cat.setName(obj.getString("name"));
+
 
 
         return cat;

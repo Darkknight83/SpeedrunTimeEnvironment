@@ -6,6 +6,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +15,31 @@ import android.widget.Toast;
 
 import com.example.speedruntimeenvironment.R;
 import com.example.speedruntimeenvironment.controllers.adapters.LeaderRecyclerAdapter;
+import com.example.speedruntimeenvironment.controllers.callbacks.LeaderboardCallback;
+import com.example.speedruntimeenvironment.controllers.speedrun.http.SpeedrunRestUsage;
+import com.example.speedruntimeenvironment.model.Category;
+import com.example.speedruntimeenvironment.model.Game;
 import com.example.speedruntimeenvironment.model.GameList;
+import com.example.speedruntimeenvironment.model.Run;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Leaderboard extends Fragment {
 
+    private static final String TAG = "Leaderboard";
+
+    private SpeedrunRestUsage client;
+
     private RecyclerView recyclerView;
     private LeaderRecyclerAdapter adapter;
-    private List<String> categoies;
+    private List<String> categories;
+
+    private Game mGame;
+
+    private AtomicReference<com.example.speedruntimeenvironment.model.Leaderboard> mLeaderboard = new AtomicReference<>();
+
 
    // private LeaderList mLeaderList = new LeaderList();
 
@@ -37,20 +53,36 @@ public class Leaderboard extends Fragment {
         Intent intent = getActivity().getIntent();
         String gameId = intent.getStringExtra("GameID");
 
- //----------TO-DO Soll die verschiedenen Kategorien enthalten
-        categoies = new ArrayList<>();
+        this.client = new SpeedrunRestUsage();
 
-//----------Dummy-Content
-        categoies.add("Any%");
-        categoies.add("100%");
-        categoies.add("0 Exit");
-        categoies.add("99 Exit");
+
+
+
+        mGame = (Game) intent.getSerializableExtra("game");
+
+        client.getLeaderboardsToCategories(mGame.getId(), mGame.getCategories().get(0).getCategoryId(), new LeaderboardCallback() {
+            @Override
+            public void onLeaderboardReceived(com.example.speedruntimeenvironment.model.Leaderboard leaderboard) {
+                Log.d(TAG, "onLeaderboardReceived: " + leaderboard);
+                mLeaderboard.set(leaderboard);
+                updateRecycler(mLeaderboard.get());
+            }
+        });
+
+ //----------TO-DO Soll die verschiedenen Kategorien enthalten
+        categories = new ArrayList<>();
+
+        List<Category> cats = mGame.getCategories();
+        for(Category c : cats) {
+            categories.add(c.getName());
+        }
 
 //----------Hier wird die Tabbar erstellt
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
 
+
 //----------Hier werden die Kategorien in das Tablayout geladen
-        for (String a: categoies) {
+        for (String a: categories) {
             tabLayout.addTab(tabLayout.newTab().setText(a));
         }
 //---------------- Set the tabs to fill the entire layout.
@@ -61,7 +93,9 @@ public class Leaderboard extends Fragment {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 Toast.makeText(getActivity(), tab.getText(), Toast.LENGTH_SHORT).show();
-              //  updateRecycler(getListe(tab.getText())); anhand des Tabnames die richtige Liste für die Kategorie erstellen/wählen
+
+
+                // updateRecycler(getListe(tab.getText()), tab.getPosition()); anhand des Tabnames die richtige Liste für die Kategorie erstellen/wählen
             }
 
             @Override
@@ -79,18 +113,28 @@ public class Leaderboard extends Fragment {
 
 //--------hier sollte dann der erste Tab den Recycler initialisieren
 
-/*
-        updateRecycler(getListe(tab.getText()));
+
+        // updateRecycler(getListe(tab.getText()));
 
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity())); */
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
 
         return v;
     }
-//-------- Idee: Recycler mit passender Liste füllen. Prinzip wie bei der Liste in Games
-   /* public void updateRecycler(List<Leader> mLeaderList){
-        adapter = new LeaderRecyclerAdapter(getActivity(), this.mLeaderList.getRanksAsStrings(), this.mLeaderList.getPlayersAsStrings(), this.mLeaderList.getTimeAsStrings(), this.mLeaderList.getPlatformAsStrings(), this.mLeaderList.getDateAsStrings(), new LeaderRecyclerAdapter.OnItemClickListener() {
+
+    //-------- Idee: Recycler mit passender Liste füllen. Prinzip wie bei der Liste in Games
+
+
+    public void updateRecycler(com.example.speedruntimeenvironment.model.Leaderboard leaderboard){
+
+        List<String> platforms = new ArrayList<>();
+        for(Run r : leaderboard.getRuns()) {
+            platforms.add(leaderboard.getPlatform());
+        }
+
+
+        adapter = new LeaderRecyclerAdapter(getActivity(),  leaderboard.getRanksAsStrings(), leaderboard.getPlayerNamesAsStrings(), leaderboard.getTimeAsStrings(), platforms, new LeaderRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String RankID) {
 
@@ -98,6 +142,8 @@ public class Leaderboard extends Fragment {
         });
 
         recyclerView.setAdapter(adapter);
-    }*/
+
+    }
+
 
 }

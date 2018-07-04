@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Game implements Serializable{
+
+
+
     private String id;
 
     private String name;
