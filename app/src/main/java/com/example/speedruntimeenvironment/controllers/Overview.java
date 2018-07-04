@@ -14,11 +14,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.speedruntimeenvironment.R;
+import com.example.speedruntimeenvironment.controllers.callbacks.GameCategoryCallback;
 import com.example.speedruntimeenvironment.controllers.callbacks.GameImageCallback;
 import com.example.speedruntimeenvironment.controllers.callbacks.GameInfoCallback;
+import com.example.speedruntimeenvironment.controllers.callbacks.LeaderboardCallback;
 import com.example.speedruntimeenvironment.controllers.speedrun.http.SpeedrunRestUsage;
+import com.example.speedruntimeenvironment.model.Category;
 import com.example.speedruntimeenvironment.model.Game;
+import com.example.speedruntimeenvironment.model.Leaderboard;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -56,7 +61,8 @@ public class Overview extends Fragment {
 
         String gameId = intent.getStringExtra("GameID");
 
-        // Game gameAlt = client.getGameInfos(gameId, name, year, devices, img);
+        final List<Category> categories = new ArrayList<>();
+
 
         client.getGameInfos(gameId, new GameInfoCallback() {
 
@@ -68,10 +74,10 @@ public class Overview extends Fragment {
                 List<String> platList = game.getPlatforms();
                 for(String p : platList) {
                     platforms.append(p);
-                    platforms.append(", ");       // TODO: Leo: String richtig generieren, dass komma richtg sind
+                    platforms.append(", ");
                 }
 
-
+                platforms.setCharAt(platforms.lastIndexOf(","), ' ');
 
                 name.setText(game.getName());
                 year.setText(String.valueOf(game.getReleaseYear()));
@@ -80,12 +86,24 @@ public class Overview extends Fragment {
 
                 mGame.set(game);
 
+
+                // hole image über url und setze imageview
                 client.getUrl(mGame.get().getUrlImage(), new GameImageCallback() {
                     @Override
                     public void gameImgLoaded(Bitmap img) {
                         imageView.setImageBitmap(img);
                     }
                 });
+
+                // hole categories über Schnittstelle
+                client.getCategoriesToGame(mGame.get().getId(), new GameCategoryCallback() {
+                    @Override
+                    public void onGetCategoriesSuccess(List<Category> pCategories) {
+                        mGame.get().setCategories(pCategories);
+                        categories.addAll(pCategories);
+                    }
+                });
+
 
             }
 
@@ -96,6 +114,21 @@ public class Overview extends Fragment {
         });
 
 
+
+        // hole Leaderboards zu verschiedenen Categories über Schnittstelle
+        // TODO: wirft in 105 nullpointer
+        /*
+        if(mGame.get().getCategories() != null) {
+            for(final Category cat : mGame.get().getCategories()) {
+                client.getLeaderboardsToCategories(mGame.get().getId(), cat.getCategoryId(), new LeaderboardCallback(){
+                    @Override
+                    public void onLeaderboardReceived(Leaderboard leaderboard) {
+                        cat.setLeaderboard(leaderboard);
+                    }
+                });
+            }
+        }
+        */
 
 
 

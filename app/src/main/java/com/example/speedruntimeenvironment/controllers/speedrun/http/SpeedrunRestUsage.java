@@ -10,10 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.speedruntimeenvironment.controllers.adapters.GamesRecyclerAdapter;
+import com.example.speedruntimeenvironment.controllers.callbacks.GameCategoryCallback;
 import com.example.speedruntimeenvironment.controllers.callbacks.GameImageCallback;
 import com.example.speedruntimeenvironment.controllers.callbacks.GameInfoCallback;
+import com.example.speedruntimeenvironment.controllers.callbacks.LeaderboardCallback;
+import com.example.speedruntimeenvironment.model.Category;
+import com.example.speedruntimeenvironment.model.CategoryList;
 import com.example.speedruntimeenvironment.model.Game;
 import com.example.speedruntimeenvironment.model.GameList;
+import com.example.speedruntimeenvironment.model.Leaderboard;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.BinaryHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -203,7 +208,7 @@ public class SpeedrunRestUsage {
     */
 
 
-    public void getGameInfos(String gameId, GameInfoCallback gameInfoCallback) {
+    public void getGameInfos(String gameId, final GameInfoCallback gameInfoCallback) {
         Log.d(TAG, "getGameInfos: START");
 
         RequestParams params = new RequestParams();
@@ -250,7 +255,62 @@ public class SpeedrunRestUsage {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                Log.d(TAG, "onFailure: START ");
+                Log.e(TAG, "onFailure: START", error);
+            }
+        });
+    }
+
+    public void getCategoriesToGame(String gameId, final GameCategoryCallback gameCategoryCallback) {
+        Log.i(TAG, "getCategoriesToGame: START");
+
+        // build relative url
+        StringBuilder sb = new StringBuilder();
+        sb.append("/games/");
+        sb.append(gameId);
+        sb.append("/categories");
+
+        SpeedrunRestClient.get(sb.toString(), null, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                CategoryList categoryList = null;
+                try {
+                    categoryList = CategoryList.fromJson(response);
+                } catch (JSONException e) {
+                    Log.e(TAG, "onSuccess: Error while Parsing Json response", e);
+                }
+                gameCategoryCallback.onGetCategoriesSuccess(categoryList.getCategories());
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.e(TAG, "onFailure: Error while fetching data from Speedrun.com", throwable);
+            }
+        });
+    }
+    public void getLeaderboardsToCategories(String gameId, String catId, final LeaderboardCallback leaderboardCallback) {
+        // build url
+        StringBuilder sb = new StringBuilder();
+        sb.append("/leaderboards/");
+        sb.append(gameId);
+        sb.append("/category/");
+        sb.append(catId);
+
+        SpeedrunRestClient.get(sb.toString(), null, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                Leaderboard leaderboard = null;
+                try {
+                    leaderboard = Leaderboard.fromJson(response);
+                } catch (JSONException e) {
+                    Log.e(TAG, "onSuccess: Error while parsing JSON", e);
+                }
+
+                leaderboardCallback.onLeaderboardReceived(leaderboard);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                Log.e(TAG, "onFailure: Unsuccessful request", throwable);
             }
         });
     }

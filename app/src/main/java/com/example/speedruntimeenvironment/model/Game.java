@@ -1,6 +1,8 @@
 package com.example.speedruntimeenvironment.model;
 
 
+import com.example.speedruntimeenvironment.controllers.Leaderboard;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,7 +25,7 @@ public class Game {
 
     private List<String> platforms;
 
-
+    private List<Category> categories;
 
     public Game() {
 
@@ -37,20 +39,21 @@ public class Game {
         this.weblink = weblink;
     }
 
-    public static Game fromJson(JSONObject obj) throws JSONException{
+    public static Game fromJson(JSONObject root) throws JSONException{
         Game game = new Game();
 
-        JSONObject root = obj.getJSONObject("data");    // TODO root in data umbennen
+        JSONObject data = root.getJSONObject("data");
 
+        game.setId(data.getString("id"));
 
-        game.setReleaseYear(root.getInt("released"));
+        game.setReleaseYear(data.getInt("released"));
 
-        game.setName(root.getJSONObject("names").getString("international"));
+        game.setName(data.getJSONObject("names").getString("international"));
 
-        game.setAbbreviation(root.getString("abbreviation"));
+        game.setAbbreviation(data.getString("abbreviation"));
 
         List<String> platforms = new ArrayList<>();
-        JSONArray platData = root.getJSONObject("platforms").getJSONArray("data");
+        JSONArray platData = data.getJSONObject("platforms").getJSONArray("data");
 
         for(int i = 0; i < platData.length(); i++)
         {
@@ -60,7 +63,7 @@ public class Game {
 
         game.setPlatforms(platforms);
 
-        game.setUrlImage(root.getJSONObject("assets").getJSONObject("cover-medium").getString("uri"));
+        game.setUrlImage(data.getJSONObject("assets").getJSONObject("cover-medium").getString("uri"));
 
         return game;
     }
@@ -119,5 +122,13 @@ public class Game {
 
     public void setPlatforms(List<String> platforms) {
         this.platforms = platforms;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 }
