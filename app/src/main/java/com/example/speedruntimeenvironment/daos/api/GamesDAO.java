@@ -19,4 +19,6 @@ public interface GamesDAO {
     List<Game> getPopularGamesFromFile(String games_file, Context context) throws IOException, JSONException;
 
     List<Game> getFavoriteGamesFromFile(String games_file,Context context) throws IOException, JSONException;
+
+    public void favoriteGamesToFile(String games_file, Context context,List<Game> favorites) throws IOException;
 }
