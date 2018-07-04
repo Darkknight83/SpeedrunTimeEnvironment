@@ -62,7 +62,7 @@ public class Games extends Fragment {
 
 
         initGames(v);
-
+        
         return v;
     }
 
