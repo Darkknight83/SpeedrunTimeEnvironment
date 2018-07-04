@@ -52,10 +52,10 @@ public class Overview extends Fragment {
 
         Intent intent = getActivity().getIntent();
 
-        name = v.findViewById(R.id.game_name);
-        year = v.findViewById(R.id.game_year);
-        devices = v.findViewById(R.id.game_devices);
-        imageView = v.findViewById(R.id.game_img);
+        TextView name = v.findViewById(R.id.game_name);
+        TextView year = v.findViewById(R.id.game_year);
+        TextView devices = v.findViewById(R.id.game_devices);
+        ImageView img = v.findViewById(R.id.game_img);
 
         //Hier dann die Objekt-Informationen passend einfügen
 
@@ -149,6 +149,7 @@ public class Overview extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), Sub_MainActivity.class);
                 intent.putExtra("Destination", getString(R.string.leaderboard));
+                intent.putExtra("GameID", gameId);
                 startActivity(intent);
             }
         });
@@ -160,6 +161,7 @@ public class Overview extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), Sub_MainActivity.class);
                 intent.putExtra("Destination", getString(R.string.guides));
+                intent.putExtra("GameID", gameId);
                 startActivity(intent);
             }
         });
@@ -171,7 +173,7 @@ public class Overview extends Fragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), Sub_MainActivity.class);
                 intent.putExtra("Destination", getString(R.string.streampage));
-                intent.putExtra("GameID", getGameID());
+                intent.putExtra("GameID", gameId);
                 startActivity(intent);
             }
         });

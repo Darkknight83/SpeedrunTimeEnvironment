@@ -1,5 +1,6 @@
 package com.example.speedruntimeenvironment.controllers;
 
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -29,6 +30,7 @@ public class Sub_MainActivity extends AppCompatActivity {
 //--------------Toolbar als Actionbar setzen
 
         Toolbar toolbar = findViewById(R.id.sub_toolbarmenu);
+        TabLayout tab = findViewById(R.id.tab_layout);
         setSupportActionBar(toolbar);
         ActionBar actionbar = getSupportActionBar();
         actionbar.setDisplayHomeAsUpEnabled(true);
@@ -66,7 +68,6 @@ public class Sub_MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.sub_toolbarmenu, menu);
-
 
         //Sichtbarkeitssteuerung der Items
         favorize = menu.findItem(R.id.action_favorite);
