@@ -52,14 +52,14 @@ public class Overview extends Fragment {
 
         Intent intent = getActivity().getIntent();
 
-        TextView name = v.findViewById(R.id.game_name);
-        TextView year = v.findViewById(R.id.game_year);
-        TextView devices = v.findViewById(R.id.game_devices);
-        ImageView img = v.findViewById(R.id.game_img);
+        final TextView name = v.findViewById(R.id.game_name);
+        final TextView year = v.findViewById(R.id.game_year);
+        final TextView devices = v.findViewById(R.id.game_devices);
+        imageView = v.findViewById(R.id.game_img);
 
         //Hier dann die Objekt-Informationen passend einfügen
 
-        String gameId = intent.getStringExtra("GameID");
+        final String gameId = intent.getStringExtra("GameID");
 
         final List<Category> categories = new ArrayList<>();
 

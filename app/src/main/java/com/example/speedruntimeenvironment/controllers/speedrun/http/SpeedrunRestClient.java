@@ -16,7 +16,12 @@ public class SpeedrunRestClient {
     }
 
     public static void getAbsolute(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-        client.get(url, params, responseHandler);
+        if(params == null) {
+            client.get(url, responseHandler);
+        } else {
+            client.get(url, params, responseHandler);
+        }
+
     }
 
 
