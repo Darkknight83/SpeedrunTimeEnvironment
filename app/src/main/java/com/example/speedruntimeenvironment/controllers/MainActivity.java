@@ -45,9 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     List<Game> FGameList;
 
-    private String GTag = "GamesFragment";
-    private String STag = "StreamsFragment";
-
 
 
 //--------------Methode die beim Erstellen der Activity aufgerufen wird
@@ -113,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
                         switch (menuItem.getItemId()) {
                             case R.id.nav_games:
                                 games = new Games();
-                                fragmentTransaction.replace(R.id.content_frame, games, GTag);
+                                fragmentTransaction.replace(R.id.content_frame, games);
                                 setTitle(getString(R.string.games));
                                 favs.setVisible(true);
                                 all.setVisible(false);
@@ -121,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
                             case R.id.nav_streams:
                                 page = new Streams();
-                                fragmentTransaction.replace(R.id.content_frame, page, STag);
+                                fragmentTransaction.replace(R.id.content_frame, page);
                                 setTitle(getString(R.string.streams));
                                 favs.setVisible(false);
                                 all.setVisible(false);
@@ -137,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
                             default:
                                 games = new Games();
-                                fragmentTransaction.replace(R.id.content_frame, games, GTag);
+                                fragmentTransaction.replace(R.id.content_frame, games);
                                 setTitle(getString(R.string.games));
                                 favs.setVisible(true);
                                 all.setVisible(false);
@@ -200,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
             mDrawerLayout.closeDrawers();
         } else {
             if (doubleTap) {
-                super.onBackPressed();
+                finish();
             } else {
                 Toast.makeText(this, "Double tab to exit", Toast.LENGTH_SHORT).show();
                 doubleTap = true;

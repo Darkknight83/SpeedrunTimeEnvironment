@@ -131,6 +131,7 @@ public class Sub_MainActivity extends AppCompatActivity {
         Fragment current = fragmentManager.findFragmentById(R.id.sub_content_frame);
 
         if(current.getClass().equals(Overview.class)){
+            finish();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }

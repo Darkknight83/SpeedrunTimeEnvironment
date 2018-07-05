@@ -105,6 +105,7 @@ public class Games extends Fragment {
         adapter = new GamesRecyclerAdapter(getActivity(), this.mGameList.getGameNamesAsStrings(), this.mGameList.getImageUrlAsStrings(), this.mGameList.getIdsAsStrings(), new GamesRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String GameID) {
+                getActivity().finish();
                 Intent intent = new Intent(getActivity(), Sub_MainActivity.class);
                 intent.putExtra("Destination", getString(R.string.overview));
                 intent.putExtra("GameID", GameID);
