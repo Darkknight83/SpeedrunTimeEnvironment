@@ -108,7 +108,6 @@ public class Games extends Fragment {
                 Intent intent = new Intent(getActivity(), Sub_MainActivity.class);
                 intent.putExtra("Destination", getString(R.string.overview));
                 intent.putExtra("GameID", GameID);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
         });
