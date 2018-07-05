@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.speedruntimeenvironment.R;
 
@@ -60,7 +61,7 @@ public class Sub_MainActivity extends AppCompatActivity {
             fragmentTransaction.replace(R.id.sub_content_frame, new AppInfo());
         if (getTitle().equals(getString(R.string.overview)))
             fragmentTransaction.replace(R.id.sub_content_frame, gameOverv = new Overview());
-        if (getTitle().equals(getString(R.string.streampage)))
+        if (getTitle().equals(getString(R.string.currentstreams)))
             fragmentTransaction.replace(R.id.sub_content_frame, new Stream());
         if (getTitle().equals(getString(R.string.leaderboard)))
             fragmentTransaction.replace(R.id.sub_content_frame, new Leaderboard());
@@ -80,8 +81,8 @@ public class Sub_MainActivity extends AppCompatActivity {
         unfavorize = menu.findItem(R.id.action_unfavorite);
 
         if (getTitle().equals(getString(R.string.overview))) {
-                favorize.setVisible(true);
-                unfavorize.setVisible(false);
+            favorize.setVisible(true);
+            unfavorize.setVisible(false);
         } else {
             favorize.setVisible(false);
             unfavorize.setVisible(false);
@@ -100,12 +101,14 @@ public class Sub_MainActivity extends AppCompatActivity {
                 onBackPressed();
                 return true;
             case R.id.action_favorite:
+                Toast.makeText(this,"added to favorites", Toast.LENGTH_SHORT).show();
                 gameOverv.addFavorite();
                 favorize.setVisible(false);
                 unfavorize.setVisible(true);
 
                 return true;
             case R.id.action_unfavorite:
+                Toast.makeText(this,"removed from favorites", Toast.LENGTH_SHORT).show();
                 gameOverv.removeFavorite();
                 favorize.setVisible(true);
                 unfavorize.setVisible(false);
@@ -128,12 +131,12 @@ public class Sub_MainActivity extends AppCompatActivity {
         Fragment current = fragmentManager.findFragmentById(R.id.sub_content_frame);
 
         if(current.getClass().equals(Overview.class)){
-                     Intent intent = new Intent(this, MainActivity.class);
-                     startActivity(intent);
-                 }
-             else {
-                       super.onBackPressed();
-                   }
-           }
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
 
 }

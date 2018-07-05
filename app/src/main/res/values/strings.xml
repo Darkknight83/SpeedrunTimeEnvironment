@@ -25,4 +25,9 @@
     <string name="time">Time</string>
     <string name="platform">Platform</string>
     <string name="all">All</string>
+    <string name="deletefav">Remove all favorites</string>
+    <string name="deletefavq">Do you really want to remove all favorites?</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Yes</string>
+    <string name="currentstreams">Current Streams</string>
 </resources>

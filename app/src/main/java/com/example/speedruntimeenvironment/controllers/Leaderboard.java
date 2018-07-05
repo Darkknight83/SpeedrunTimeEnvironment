@@ -2,12 +2,16 @@ package com.example.speedruntimeenvironment.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -83,13 +87,14 @@ public class Leaderboard extends Fragment {
 //----------Hier wird die Tabbar erstellt
         TabLayout tabLayout = (TabLayout) v.findViewById(R.id.tab_layout);
 
-
 //----------Hier werden die Kategorien in das Tablayout geladen
         for (String a: categories) {
-            if(tabLayout.getTabCount()<5) {
+
                 tabLayout.addTab(tabLayout.newTab().setText(a));
-            }
+
         }
+
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 //---------------- Set the tabs to fill the entire layout.
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
@@ -106,7 +111,6 @@ public class Leaderboard extends Fragment {
                         adapter.notifyDataSetChanged();
                     }
                 });
-                // updateRecycler(getListe(tab.getText()), tab.getPosition()); anhand des Tabnames die richtige Liste für die Kategorie erstellen/wählen
             }
 
             @Override
@@ -171,10 +175,5 @@ public class Leaderboard extends Fragment {
         });
 
         recyclerView.setAdapter(adapter);
-
     }
-
-
-
-
 }

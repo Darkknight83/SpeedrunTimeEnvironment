@@ -49,7 +49,7 @@ public class Overview extends Fragment {
 
     private GamesDAO gamesDAO;
 
-    List<Game> FGameList;
+    private List<Game> FGameList;
 
     private static final String TAG = "Sub_MainActivity";
 
@@ -189,7 +189,7 @@ public class Overview extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), Sub_MainActivity.class);
-                intent.putExtra("Destination", getString(R.string.streampage));
+                intent.putExtra("Destination", getString(R.string.currentstreams));
                 intent.putExtra("GameID", gameId);
                 startActivity(intent);
             }

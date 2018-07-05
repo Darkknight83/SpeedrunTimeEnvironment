@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     List<Game> FGameList;
 
+    private String GTag = "GamesFragment";
+    private String STag = "StreamsFragment";
+
 
 
 //--------------Methode die beim Erstellen der Activity aufgerufen wird
@@ -110,19 +113,17 @@ public class MainActivity extends AppCompatActivity {
                         switch (menuItem.getItemId()) {
                             case R.id.nav_games:
                                 games = new Games();
-                                fragmentTransaction.replace(R.id.content_frame, games);
+                                fragmentTransaction.replace(R.id.content_frame, games, GTag);
                                 setTitle(getString(R.string.games));
-                                search.setVisible(true);
                                 favs.setVisible(true);
                                 all.setVisible(false);
                                 break;
 
                             case R.id.nav_streams:
                                 page = new Streams();
-                                fragmentTransaction.replace(R.id.content_frame, page);
+                                fragmentTransaction.replace(R.id.content_frame, page, STag);
                                 setTitle(getString(R.string.streams));
-                                search.setVisible(true);
-                                favs.setVisible(true);
+                                favs.setVisible(false);
                                 all.setVisible(false);
                                 break;
 
@@ -130,16 +131,14 @@ public class MainActivity extends AppCompatActivity {
                                 page = new Options();
                                 fragmentTransaction.replace(R.id.content_frame, page);
                                 setTitle(getString(R.string.options));
-                                search.setVisible(false);
                                 favs.setVisible(false);
                                 all.setVisible(false);
                                 break;
 
                             default:
                                 games = new Games();
-                                fragmentTransaction.replace(R.id.content_frame, games);
+                                fragmentTransaction.replace(R.id.content_frame, games, GTag);
                                 setTitle(getString(R.string.games));
-                                search.setVisible(true);
                                 favs.setVisible(true);
                                 all.setVisible(false);
                                 break;
@@ -161,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.tooblarmenu, menu);
 
         //um die Items ansteuern zu können
-        search = menu.findItem(R.id.action_search);
         favs = menu.findItem(R.id.action_favs);
         all = menu.findItem(R.id.action_all);
         all.setVisible(false);
@@ -176,8 +174,6 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
-            case R.id.action_search:
-                return true;
 
             case R.id.action_favs:
                 if (games.updateRecycler(true)) {
@@ -186,9 +182,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             case R.id.action_all:
-                    games.updateRecycler(false);
-                    favs.setVisible(true);
-                    all.setVisible(false);
+                games.updateRecycler(false);
+                favs.setVisible(true);
+                all.setVisible(false);
                 return true;
 
         }
