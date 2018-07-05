@@ -1,6 +1,10 @@
 package com.example.speedruntimeenvironment.controllers;
 
+import android.app.ActivityManager;
+import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
@@ -116,6 +120,20 @@ public class Sub_MainActivity extends AppCompatActivity {
 
     public MenuItem getUnfavorize() {
         return unfavorize;
+    }
+
+    @Override
+    public void onBackPressed(){
+
+        Fragment current = fragmentManager.findFragmentById(R.id.sub_content_frame);
+
+        if(current.getClass().equals(Overview.class)){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+        else {
+            super.onBackPressed();
+        }
     }
 
 }
