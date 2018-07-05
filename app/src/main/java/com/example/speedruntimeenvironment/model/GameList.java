@@ -72,4 +72,8 @@ public class GameList implements Serializable{
     public void setGames(List<Game> games) {
         this.games = games;
     }
+
+    public boolean isEmpty(){
+        return games.isEmpty();
+    }
 }

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.speedruntimeenvironment.R;
 import com.example.speedruntimeenvironment.controllers.adapters.GamesRecyclerAdapter;
@@ -37,6 +38,7 @@ public class Games extends Fragment {
     // ui
     private RecyclerView recyclerView;
     private GamesRecyclerAdapter adapter;
+    View v;
 
 
     // http-requests
@@ -54,34 +56,45 @@ public class Games extends Fragment {
         Log.d(TAG, "onCreateView: started");
 
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.activity_games, container, false);
+        v =  inflater.inflate(R.layout.activity_games, container, false);
 
         // init
         this.gamesDAO = new GamesDAOImpl();
         this.client = new SpeedrunRestUsage();
 
 
-        initGames(v);
+        initGames(v, false);
         
         return v;
     }
 
-    private void initGames(View v) {
+    private boolean initGames(View v, boolean listFav) {
 
         Log.d(TAG, "initGames: START");
 
         // hole games und adde sie zur liste
-
-        try {
-            mGameList.setGames(this.gamesDAO.getPopularGamesFromFile(GAMES_FILE, this.getActivity()));
-        } catch (IOException e) {
-            Log.e(TAG, "initGames: JSON-file not found", e);    // TODO: Toast hier: "Couldn't load games"
-        } catch (JSONException e) {
-            Log.e(TAG, "initGames: Error while parsing JSON-file", e);  //TODO: Toast hier: "Couldn't load games"
+        if (listFav) {
+            try {
+                mGameList.setGames(this.gamesDAO.getFavoriteGamesFromFile(getString(R.string.favorites), this.getActivity()));
+            } catch (IOException e){
+                Log.e(TAG, "initGames: File not found", e);
+            }
+        } else {
+            try {
+                mGameList.setGames(this.gamesDAO.getPopularGamesFromFile(GAMES_FILE, this.getActivity()));
+        } catch(IOException e){
+            Log.e(TAG, "initGames: File not found", e);    // TODO: Toast hier: "Couldn't load games"
+        } catch(JSONException e){
+            Log.e(TAG, "initGames: Error while parsing File", e);  //TODO: Toast hier: "Couldn't load games"
         }
-
-        initRecyclerView(v);
-
+    }
+        if (mGameList.isEmpty()){
+            Toast.makeText(this.getActivity(),"No Favorites", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            initRecyclerView(v);
+            return true;
+        }
     }
 
     private void initRecyclerView(View v) {
@@ -106,5 +119,7 @@ public class Games extends Fragment {
 
     }
 
-
+    public boolean updateRecycler(boolean listFav){
+        return initGames(v, listFav);
+    }
 }

@@ -12,11 +12,19 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.speedruntimeenvironment.R;
+import com.example.speedruntimeenvironment.daos.api.GamesDAO;
+import com.example.speedruntimeenvironment.daos.impl.GamesDAOImpl;
+import com.example.speedruntimeenvironment.model.Game;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,11 +36,14 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem search;
     private MenuItem favs;
     private MenuItem all;
-
+    private Fragment page;
     private DrawerLayout mDrawerLayout;
-
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
+    private Games games;
+    private GamesDAO gamesDAO;
+    private static final String TAG = "MainActivity";
+    List<Game> FGameList;
 
 
 
@@ -44,6 +55,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.navigation);
         setTitle(getString(R.string.games));
 
+        this.gamesDAO = new GamesDAOImpl();
+
+        try {
+            FGameList = this.gamesDAO.getFavoriteGamesFromFile(getString(R.string.favorites), this);
+        } catch (IOException e) {
+            Log.e(TAG, "initGames: File not found", e);
+        }
+        if(FGameList.isEmpty()) {
+            try {
+                this.gamesDAO.favoriteGamesToFile(getString(R.string.favorites), this, new ArrayList<Game>());
+            } catch (IOException e) {
+                Log.e(TAG, "initGames: File not found", e);
+            }
+        }
+
 //--------------Toolbar als Actionbar setzen und Burgermenu hinzufügen
 
         Toolbar toolbar = findViewById(R.id.toolbarmenu);
@@ -54,9 +80,10 @@ public class MainActivity extends AppCompatActivity {
 
 //--------------Frame in dem die Fragments erscheinen. Als Startfragment "Games" gesetzt
 
+        games = new Games();
         fragmentManager = getSupportFragmentManager();
         fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.content_frame, new Games());
+        fragmentTransaction.replace(R.id.content_frame, games);
         fragmentTransaction.commit();
 
 //--------------NavigationDrawer (SwipeMenu + Listener)
@@ -81,11 +108,10 @@ public class MainActivity extends AppCompatActivity {
                         fragmentManager = getSupportFragmentManager();
                         fragmentTransaction = fragmentManager.beginTransaction();
 
-                        Fragment page;
-
                         switch (menuItem.getItemId()) {
                             case R.id.nav_games:
-                                page = new Games();
+                                games = new Games();
+                                fragmentTransaction.replace(R.id.content_frame, games);
                                 setTitle(getString(R.string.games));
                                 search.setVisible(true);
                                 favs.setVisible(true);
@@ -94,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
                             case R.id.nav_streams:
                                 page = new Streams();
+                                fragmentTransaction.replace(R.id.content_frame, page);
                                 setTitle(getString(R.string.streams));
                                 search.setVisible(true);
                                 favs.setVisible(true);
@@ -102,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
 
                             case R.id.nav_options:
                                 page = new Options();
+                                fragmentTransaction.replace(R.id.content_frame, page);
                                 setTitle(getString(R.string.options));
                                 search.setVisible(false);
                                 favs.setVisible(false);
@@ -109,7 +137,8 @@ public class MainActivity extends AppCompatActivity {
                                 break;
 
                             default:
-                                page = new Games();
+                                games = new Games();
+                                fragmentTransaction.replace(R.id.content_frame, games);
                                 setTitle(getString(R.string.games));
                                 search.setVisible(true);
                                 favs.setVisible(true);
@@ -117,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                         }
 
-                        fragmentTransaction.replace(R.id.content_frame, page);
+
                         fragmentTransaction.commit();
 
                         return true;
@@ -152,12 +181,15 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_favs:
-                favs.setVisible(false);
-                all.setVisible(true);
+                if (games.updateRecycler(true)) {
+                    favs.setVisible(false);
+                    all.setVisible(true);
+                }
                 return true;
             case R.id.action_all:
-                favs.setVisible(true);
-                all.setVisible(false);
+                    games.updateRecycler(false);
+                    favs.setVisible(true);
+                    all.setVisible(false);
                 return true;
 
         }

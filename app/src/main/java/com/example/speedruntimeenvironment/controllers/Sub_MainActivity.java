@@ -20,12 +20,16 @@ public class Sub_MainActivity extends AppCompatActivity {
     private FragmentTransaction fragmentTransaction;
 
     private MenuItem favorize;
+    private MenuItem unfavorize;
+
+    private Overview gameOverv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sub_navigation);
         setTitle(getIntent().getStringExtra("Destination"));
+
 
 //--------------Toolbar als Actionbar setzen
 
@@ -51,7 +55,7 @@ public class Sub_MainActivity extends AppCompatActivity {
         if (getTitle().equals(getString(R.string.appinfo)))
             fragmentTransaction.replace(R.id.sub_content_frame, new AppInfo());
         if (getTitle().equals(getString(R.string.overview)))
-            fragmentTransaction.replace(R.id.sub_content_frame, new Overview());
+            fragmentTransaction.replace(R.id.sub_content_frame, gameOverv = new Overview());
         if (getTitle().equals(getString(R.string.streampage)))
             fragmentTransaction.replace(R.id.sub_content_frame, new Stream());
         if (getTitle().equals(getString(R.string.leaderboard)))
@@ -69,11 +73,14 @@ public class Sub_MainActivity extends AppCompatActivity {
 
         //Sichtbarkeitssteuerung der Items
         favorize = menu.findItem(R.id.action_favorite);
+        unfavorize = menu.findItem(R.id.action_unfavorite);
 
         if (getTitle().equals(getString(R.string.overview))) {
-            favorize.setVisible(true);
+                favorize.setVisible(true);
+                unfavorize.setVisible(false);
         } else {
             favorize.setVisible(false);
+            unfavorize.setVisible(false);
         }
 
         return true;
@@ -88,11 +95,27 @@ public class Sub_MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 onBackPressed();
                 return true;
-            //to-do
-            //case R.id.action_favorite:
+            case R.id.action_favorite:
+                gameOverv.addFavorite();
+                favorize.setVisible(false);
+                unfavorize.setVisible(true);
 
+                return true;
+            case R.id.action_unfavorite:
+                gameOverv.removeFavorite();
+                favorize.setVisible(true);
+                unfavorize.setVisible(false);
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public MenuItem getFavorize() {
+        return favorize;
+    }
+
+    public MenuItem getUnfavorize() {
+        return unfavorize;
     }
 
 }

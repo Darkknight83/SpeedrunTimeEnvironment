@@ -16,6 +16,7 @@
     <string name="backarrow">BackArrow</string>
     <string name="title_activity_faq">faq</string>
     <string name="favorite">Favorite</string>
+    <string name="unfavorite">Unfavorite</string>
     <string name="overview">Overview</string>
     <string name="opendrawer">opendrawer</string>
     <string name="closedrawer">closedrawer</string>

@@ -14,14 +14,14 @@
             android:id="@+id/action_favs"
             android:orderInCategory="200"
             android:title="@string/filter"
-            android:icon="@drawable/ic_heart"
+            android:icon="@drawable/ic_heart_border"
             app:showAsAction="collapseActionView|ifRoom"/>
 
           <item
         android:id="@+id/action_all"
         android:orderInCategory="200"
         android:title="@string/favorites"
-        android:icon="@drawable/ic_heart_border"
+        android:icon="@drawable/ic_heart"
         app:showAsAction="collapseActionView|ifRoom"/>
 
     </menu>

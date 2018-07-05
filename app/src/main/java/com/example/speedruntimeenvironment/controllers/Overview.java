@@ -5,6 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +22,13 @@ import com.example.speedruntimeenvironment.controllers.callbacks.GameImageCallba
 import com.example.speedruntimeenvironment.controllers.callbacks.GameInfoCallback;
 import com.example.speedruntimeenvironment.controllers.callbacks.LeaderboardCallback;
 import com.example.speedruntimeenvironment.controllers.speedrun.http.SpeedrunRestUsage;
+import com.example.speedruntimeenvironment.daos.api.GamesDAO;
+import com.example.speedruntimeenvironment.daos.impl.GamesDAOImpl;
 import com.example.speedruntimeenvironment.model.Category;
 import com.example.speedruntimeenvironment.model.Game;
 import com.example.speedruntimeenvironment.model.Leaderboard;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -39,7 +45,13 @@ public class Overview extends Fragment {
 
     private AtomicReference<Game> mGame = new AtomicReference<>();
 
+    private Game currentGame;
 
+    private GamesDAO gamesDAO;
+
+    List<Game> FGameList;
+
+    private static final String TAG = "Sub_MainActivity";
 
 
     @Override
@@ -47,6 +59,13 @@ public class Overview extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.activity_overview, container, false);
+
+        gamesDAO = new GamesDAOImpl();
+        try {
+            FGameList = this.gamesDAO.getFavoriteGamesFromFile(getString(R.string.favorites), getActivity());
+        } catch (IOException e) {
+            Log.e(TAG, "initGames: File not found", e);
+        }
 
         client = new SpeedrunRestUsage();
 
@@ -68,6 +87,14 @@ public class Overview extends Fragment {
 
             @Override
             public void onSuccess(Game game) {
+
+                currentGame = game;
+                for(Game g: FGameList){
+                    if(g.getId().equalsIgnoreCase(currentGame.getId())){
+                        ((Sub_MainActivity)getActivity()).getFavorize().setVisible(false);
+                        ((Sub_MainActivity)getActivity()).getUnfavorize().setVisible(true);
+                    }
+                }
 
                 // update UI
                 StringBuilder platforms = new StringBuilder();
@@ -171,7 +198,38 @@ public class Overview extends Fragment {
         return v;
     }
 
-    public String getGameID(){
-        return GameID;
+    public void addFavorite(){
+        try {
+            FGameList = this.gamesDAO.getFavoriteGamesFromFile(getString(R.string.favorites), getActivity());
+        } catch (IOException e) {
+            Log.e(TAG, "initGames: File not found", e);
+        }
+        FGameList.add(currentGame);
+        try {
+            this.gamesDAO.favoriteGamesToFile(getString(R.string.favorites), getActivity(), FGameList);
+        } catch (IOException e) {
+            Log.e(TAG, "initGames: File not found", e);
+        }
     }
+
+    public void removeFavorite(){
+        try {
+            FGameList = this.gamesDAO.getFavoriteGamesFromFile(getString(R.string.favorites), getActivity());
+        } catch (IOException e) {
+            Log.e(TAG, "initGames: File not found", e);
+        }
+        List<Game> save = new ArrayList<>();
+        for(Game g: FGameList){
+            if(!g.getId().equalsIgnoreCase(currentGame.getId())){
+                    save.add(g);
+                //Toast.makeText(getActivity(),"Löschen", Toast.LENGTH_SHORT).show();
+            }
+        }
+        try {
+            this.gamesDAO.favoriteGamesToFile(getString(R.string.favorites), getActivity(), save);
+        } catch (IOException e) {
+            Log.e(TAG, "initGames: File not found", e);
+        }
+    }
+
 }
