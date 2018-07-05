@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navigation);
         setTitle(getString(R.string.games));
-
         this.gamesDAO = new GamesDAOImpl();
 
         try {
@@ -62,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             Log.e(TAG, "initGames: File not found", e);
         }
-        if(FGameList.isEmpty()) {
+        if(FGameList == null || FGameList.isEmpty()) {
             try {
                 this.gamesDAO.favoriteGamesToFile(getString(R.string.favorites), this, new ArrayList<Game>());
             } catch (IOException e) {

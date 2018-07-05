@@ -107,9 +107,13 @@ public class GamesDAOImpl implements GamesDAO {
             favorites = (List<Game>)ois.readObject();
             ois.close();
         }
-        catch(Exception e)
+        catch(FileNotFoundException e)
         {
             Log.e(TAG, "favoriteGamesToFile: cannot find file ", e);
+        }
+        catch (ClassNotFoundException e)
+        {
+            e.printStackTrace();
         }
         return favorites;
     }
@@ -125,7 +129,7 @@ public class GamesDAOImpl implements GamesDAO {
             oos.writeObject(favorites);
             oos.close();
         }
-        catch(Exception e)
+        catch(FileNotFoundException e)
         {
             Log.e(TAG, "favoriteGamesToFile: cannot find file ", e);
         }
