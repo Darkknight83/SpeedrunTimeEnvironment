@@ -122,4 +122,18 @@ public class Sub_MainActivity extends AppCompatActivity {
         return unfavorize;
     }
 
+    @Override
+    public void onBackPressed(){
+
+        Fragment current = fragmentManager.findFragmentById(R.id.sub_content_frame);
+
+        if(current.getClass().equals(Overview.class)){
+                     Intent intent = new Intent(this, MainActivity.class);
+                     startActivity(intent);
+                 }
+             else {
+                       super.onBackPressed();
+                   }
+           }
+
 }
