@@ -30,4 +30,14 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">Yes</string>
     <string name="currentstreams">Current Streams</string>
+    <string name="faq1">What is a Speedrun?</string>
+    <string name="faq1a">Playing trough a game as fast as possible is called a Speedrun. Time will be stoppen from start to the end to compete with others.</string>
+    <string name="faq2">What is a Run?</string>
+    <string name="faq2a">To play the game with a certain objective while time is been stoped is called a Run.</string>
+    <string name="faq3">What is Any% or 100%?</string>
+    <string name="faq3a">There are different objectives in Runs to compete with other like  Any% where you want to reach the end as fast as possible or 100% where you need everything you can collect or achieve as fast as possible.</string>
+    <string name="faq4">Where do you get your data from?</string>
+    <string name="faq4a">We get our data from the Speedrun.com API.</string>
+    <string name="grpname">Group: SpeedrunTime_Error</string>
+    <string name="member">Nils Jakubeit, Jannick Faber, Leo Rüther, Brian Werthschulte</string>
 </resources>
