@@ -2,32 +2,24 @@ package com.example.speedruntimeenvironment.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.speedruntimeenvironment.R;
 import com.example.speedruntimeenvironment.controllers.adapters.LeaderRecyclerAdapter;
 import com.example.speedruntimeenvironment.controllers.callbacks.LeaderboardCallback;
 import com.example.speedruntimeenvironment.controllers.speedrun.http.SpeedrunRestUsage;
-import com.example.speedruntimeenvironment.controllers.speedrun.http.utils.UTIL;
+import com.example.speedruntimeenvironment.util.UTIL;
 import com.example.speedruntimeenvironment.model.Category;
 import com.example.speedruntimeenvironment.model.Game;
-import com.example.speedruntimeenvironment.model.GameList;
 import com.example.speedruntimeenvironment.model.Run;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -160,8 +152,14 @@ public class Leaderboard extends Fragment {
 
             formatted.append(hms[0]);
             formatted.append(":");
+            if(hms[1] <= 9) {
+                formatted.append("0");
+            }
             formatted.append(hms[1]);
             formatted.append(":");
+            if(hms[2] <= 9) {
+                formatted.append("0");
+            }
             formatted.append(hms[2]);
 
             formattedTimes.add(formatted.toString());
