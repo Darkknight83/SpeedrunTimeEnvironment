@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.speedruntimeenvironment.R;
 import com.example.speedruntimeenvironment.controllers.adapters.LeaderRecyclerAdapter;
@@ -49,7 +50,7 @@ public class Leaderboard extends Fragment {
 
 //----------Sollte auch hier die GameID liefern, auf dessen Basis die Leaderboards geholt werden
         Intent intent = getActivity().getIntent();
-        String gameId = intent.getStringExtra("GameID");
+        // String gameId = intent.getStringExtra("GameID");
 
         this.client = new SpeedrunRestUsage();
 
@@ -65,6 +66,11 @@ public class Leaderboard extends Fragment {
                 mLeaderboard.set(leaderboard);
                 updateRecycler(mLeaderboard.get());
 
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(getActivity(),"Couldn't load this specific leaderboard", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -102,17 +108,22 @@ public class Leaderboard extends Fragment {
                         updateRecycler(mLeaderboard.get());
                         adapter.notifyDataSetChanged();
                     }
+
+                    @Override
+                    public void onFailure() {
+                        Toast.makeText(getActivity(),"Couldn't load this specific leaderboard", Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-// called when tab unselected
+                // called when tab unselected
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-// called when a tab is reselected
+                // called when a tab is reselected
             }
         });
 
@@ -148,7 +159,6 @@ public class Leaderboard extends Fragment {
 
             StringBuilder formatted = new StringBuilder();
             int[] hms = UTIL.erzeugeTimeFormat(Long.parseLong(t));
-
 
             formatted.append(hms[0]);
             formatted.append(":");
