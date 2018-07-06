@@ -24,9 +24,6 @@ public class SpeedrunRestClient {
 
     }
 
-
-
-
     private static String getAbsoluteUrl(String relativeUrl) {
         StringBuilder sb = new StringBuilder(BASE_URL);
         sb.append(relativeUrl);

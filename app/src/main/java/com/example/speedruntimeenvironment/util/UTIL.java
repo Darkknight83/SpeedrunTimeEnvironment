@@ -1,4 +1,4 @@
-package com.example.speedruntimeenvironment.controllers.speedrun.http.utils;
+package com.example.speedruntimeenvironment.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

@@ -2,32 +2,25 @@ package com.example.speedruntimeenvironment.controllers;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.SyncStateContract;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.speedruntimeenvironment.R;
 import com.example.speedruntimeenvironment.controllers.adapters.LeaderRecyclerAdapter;
 import com.example.speedruntimeenvironment.controllers.callbacks.LeaderboardCallback;
 import com.example.speedruntimeenvironment.controllers.speedrun.http.SpeedrunRestUsage;
-import com.example.speedruntimeenvironment.controllers.speedrun.http.utils.UTIL;
+import com.example.speedruntimeenvironment.util.UTIL;
 import com.example.speedruntimeenvironment.model.Category;
 import com.example.speedruntimeenvironment.model.Game;
-import com.example.speedruntimeenvironment.model.GameList;
 import com.example.speedruntimeenvironment.model.Run;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -57,7 +50,7 @@ public class Leaderboard extends Fragment {
 
 //----------Sollte auch hier die GameID liefern, auf dessen Basis die Leaderboards geholt werden
         Intent intent = getActivity().getIntent();
-        String gameId = intent.getStringExtra("GameID");
+        // String gameId = intent.getStringExtra("GameID");
 
         this.client = new SpeedrunRestUsage();
 
@@ -73,6 +66,11 @@ public class Leaderboard extends Fragment {
                 mLeaderboard.set(leaderboard);
                 updateRecycler(mLeaderboard.get());
 
+            }
+
+            @Override
+            public void onFailure() {
+                Toast.makeText(getActivity(),"Couldn't load this specific leaderboard", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -110,17 +108,22 @@ public class Leaderboard extends Fragment {
                         updateRecycler(mLeaderboard.get());
                         adapter.notifyDataSetChanged();
                     }
+
+                    @Override
+                    public void onFailure() {
+                        Toast.makeText(getActivity(),"Couldn't load this specific leaderboard", Toast.LENGTH_SHORT).show();
+                    }
                 });
             }
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-// called when tab unselected
+                // called when tab unselected
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-// called when a tab is reselected
+                // called when a tab is reselected
             }
         });
 
@@ -157,11 +160,16 @@ public class Leaderboard extends Fragment {
             StringBuilder formatted = new StringBuilder();
             int[] hms = UTIL.erzeugeTimeFormat(Long.parseLong(t));
 
-
             formatted.append(hms[0]);
             formatted.append(":");
+            if(hms[1] <= 9) {
+                formatted.append("0");
+            }
             formatted.append(hms[1]);
             formatted.append(":");
+            if(hms[2] <= 9) {
+                formatted.append("0");
+            }
             formatted.append(hms[2]);
 
             formattedTimes.add(formatted.toString());

@@ -20,5 +20,5 @@ public interface GamesDAO {
 
     List<Game> getFavoriteGamesFromFile(String games_file,Context context) throws IOException;
 
-    public void favoriteGamesToFile(String games_file, Context context,List<Game> favorites) throws IOException;
+    void favoriteGamesToFile(String games_file, Context context,List<Game> favorites) throws IOException;
 }

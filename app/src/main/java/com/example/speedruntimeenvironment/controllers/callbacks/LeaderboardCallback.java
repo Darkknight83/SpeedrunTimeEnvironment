@@ -4,4 +4,5 @@ import com.example.speedruntimeenvironment.model.Leaderboard;
 
 public interface LeaderboardCallback {
     void onLeaderboardReceived(Leaderboard leaderboard);
+    void onFailure();
 }
